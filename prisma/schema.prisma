@@ -11,7 +11,178 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id             String               @id
+  email          String               @unique
+  userType       UserType
+  approvalStatus ApprovalStatus       @default(PENDING)
+  userDetails    PersonalInformation?
+
+  // SPONSOR FIELDS
+  scholarshipProgram ScholarshipProgram[]
+  grantProgram       GrantProgram[]
+  organization       OrganizationInfo[]
+
+  // STUDENT FIELDS
+  scholarshipApplications StudentApplication[]
+}
+
+model PersonalInformation {
+  id            Int               @id @default(autoincrement())
+  firstName     String
+  middleName    String?
+  lastName      String
+  maritalStatus MaritalStatus
+  gender        Gender
+  dateOfBirth   DateTime
+  registeredOn  DateTime          @default(now())
+  addressOne    String
+  addressTwo    String?
+  city          String
+  province      String
+  phoneNumber   String
+  relationship  RelationshipInfo?
+
+  // USER REFERENCE
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+}
+
+model RelationshipInfo {
+  id               Int     @id @default(autoincrement())
+  motherFirstName  String?
+  motherLastName   String?
+  motherOccupation String?
+  motherPhone      String?
+  fatherFirstName  String?
+  fatherLastName   String?
+  fatherPhone      String?
+  fatherOccupation String?
+
+  // PERSONAL INFORMATION REFERENCE
+  personalInformation PersonalInformation @relation(fields: [personalInfoId], references: [id])
+  personalInfoId      Int                 @unique
+}
+
+model ScholarshipProgram {
+  id            Int                  @id @default(autoincrement())
+  name          String               @unique
+  description   String
+  postedOn      DateTime             @default(now())
+  degreeLevel   DegreeLevel
+  maxApplicants Int
+  status        ProgramStatus
+  reviewStatus  ApprovalStatus       @default(PENDING)
+  applicants    StudentApplication[]
+
+  address     String
+  city        String
+  province    String
+  email       String?
+  phoneNumber String?
+  website     String?
+
+  // SPONSOR USER REFERENCE
+  sponsorUser   User?   @relation(fields: [sponsorUserId], references: [id])
+  sponsorUserId String?
+}
+
+model GrantProgram {
+  id            Int                  @id @default(autoincrement())
+  name          String               @unique
+  description   String
+  postedOn      DateTime             @default(now())
+  amountOffer   String
+  degreeLevel   DegreeLevel
+  maxApplicants Int
+  status        ProgramStatus
+  reviewStatus  ApprovalStatus       @default(PENDING)
+  applicants    StudentApplication[]
+
+  address     String
+  city        String
+  province    String
+  email       String?
+  phoneNumber String?
+  website     String?
+
+  // SPONSOR USER REFERENCE
+  sponsorUser   User?   @relation(fields: [sponsorUserId], references: [id])
+  sponsorUserId String?
+}
+
+model OrganizationInfo {
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  logo          String?
+  description   String
+  address       String
+  city          String
+  province      String
+  email         String?
+  phoneNumber   String?
+  website       String?
+  sponsorUser   User    @relation(fields: [sponsorUserId], references: [id])
+  sponsorUserId String
+}
+
+model StudentApplication {
+  id              Int            @id @default(autoincrement())
+  status          ApprovalStatus @default(PENDING)
+  appliedOn       DateTime       @default(now())
+  reason          String
+  videoReasonLink String?
+
+  // STUDENT USER REFERENCE
+  studentUser   User   @relation(fields: [studentUserId], references: [id])
+  studentUserId String
+
+  // SCHOLARSHIP PROGRAM REFERENCE
+  scholarshipProgram   ScholarshipProgram? @relation(fields: [scholarshipProgramId], references: [id])
+  scholarshipProgramId Int?
+
+  // GRANT PROGRAM REFERENCE
+  grantProgram   GrantProgram? @relation(fields: [grantProgramId], references: [id])
+  grantProgramId Int?
+}
+
+enum ScholarshipType {
+  ACADEMIC
+  SPORTS
+  ESSAY
+  OTHER
+}
+
+enum DegreeLevel {
+  UNDERGRADUATE
+  GRADUATE
+  POST_GRADUATE
+}
+
+enum ProgramStatus {
+  OPEN
+  CLOSED
+}
+
+enum UserType {
+  ADMIN
+  SPONSOR
+  STUDENT
+}
+
+enum ApprovalStatus {
+  REJECTED
+  PENDING
+  APPROVED
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+enum Gender {
+  MALE
+  FEMALE
 }
