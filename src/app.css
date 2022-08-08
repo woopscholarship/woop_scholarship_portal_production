@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+@layer base {
+  *{
+    @apply box-border
+  }
+
+  body, html {
+    @apply overflow-x-hidden;
+  }
+
+  a {
+    @apply text-primary no-underline
+  }
+}
+

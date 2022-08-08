@@ -7,25 +7,31 @@ export const SCHOLARSHIP_PROGRAM: any[] = [];
 export const GRANT_PROGRAM: any[] = [];
 
 function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefined): any {
+	const firstName = faker.name.firstName();
+	const lastName = faker.name.lastName();
+
 	const user: any = {
 		id: faker.datatype.uuid(),
 		email: faker.internet.email(),
 		userType: userType ? userType : faker.helpers.arrayElement(['STUDENT', 'SPONSOR']),
-		approvalStatus: faker.helpers.arrayElement(['PENDING', 'APPROVED', 'REJECTED'])
+		approvalStatus: faker.helpers.arrayElement(['PENDING', 'APPROVED', 'REJECTED']),
+		displayName: `${firstName} ${lastName}`,
 	};
+
+
 
 	if (user.userType === 'STUDENT') {
 		user.userDetails = {
 			create: {
-				firstName: faker.name.firstName(),
-				lastName: faker.name.lastName(),
+				firstName: firstName,
+				lastName: lastName,
 				maritalStatus: faker.helpers.arrayElement(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED']),
 				gender: faker.helpers.arrayElement(['FEMALE', 'MALE']),
 				dateOfBirth: faker.date.past(),
 				addressOne: faker.address.streetAddress(),
 				city: faker.address.cityName(),
 				province: faker.address.state(),
-        phoneNumber: faker.phone.number(),
+				phoneNumber: faker.phone.number(),
 				relationship: {
 					create: {
 						motherFirstName: faker.name.firstName(),
@@ -45,8 +51,8 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 	if (user.userType === 'SPONSOR') {
 		user.userDetails = {
 			create: {
-				firstName: faker.name.firstName(),
-				lastName: faker.name.lastName(),
+				firstName: firstName,
+				lastName: lastName,
 				maritalStatus: faker.helpers.arrayElement(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED']),
 				gender: faker.helpers.arrayElement(['FEMALE', 'MALE']),
 				dateOfBirth: faker.date.past(),
@@ -76,15 +82,14 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 }
 
 function createRandomUsers(count: number, userType: 'STUDENT' | 'SPONSOR' | undefined = undefined) {
-  const users: any[] = [];
+	const users: any[] = [];
 
-  Array.from({ length: count }).forEach(() => {
-    users.push(createRandomUser(userType ? userType : undefined));
-  });
+	Array.from({ length: count }).forEach(() => {
+		users.push(createRandomUser(userType ? userType : undefined));
+	});
 
-  return users;
+	return users;
 }
-
 
 function createScholarshipProgram() {
 	const scholarshipProgram = {
@@ -124,25 +129,23 @@ function createGrantProgram() {
 		email: faker.internet.email(),
 		website: faker.internet.url()
 	};
-  return grantProgram;
+	return grantProgram;
 }
 
 function createStudentApplications(count: number) {
-  const applications: any[] = [];
+	const applications: any[] = [];
 
-  Array.from({ length: count }).forEach(() => {
-    applications.push({
-      reason: faker.lorem.paragraph(),
-      studentUser: {
-        create: createRandomUser('STUDENT')
-      }
-    });
-  });
+	Array.from({ length: count }).forEach(() => {
+		applications.push({
+			reason: faker.lorem.paragraph(),
+			studentUser: {
+				create: createRandomUser('STUDENT')
+			}
+		});
+	});
 
-  return applications;
-};
-
-
+	return applications;
+}
 
 Array.from({ length: 20 }).forEach(() => {
 	USERS.push(createRandomUser());
@@ -164,9 +167,9 @@ async function main() {
 				sponsorUser: {
 					create: createRandomUser('SPONSOR')
 				},
-        applicants: {
-          create: createStudentApplications(50),
-        }
+				applicants: {
+					create: createStudentApplications(50)
+				}
 			}
 		});
 	});
@@ -178,14 +181,12 @@ async function main() {
 				sponsorUser: {
 					create: createRandomUser('SPONSOR')
 				},
-        applicants: {
-          create: createStudentApplications(10),
-        }
+				applicants: {
+					create: createStudentApplications(10)
+				}
 			}
 		});
 	});
-
-
 }
 
 main()
