@@ -1,11 +1,10 @@
 <script>
-    import Icon from 'svelte-awesome';
-    import google from 'svelte-awesome/icons/google';
+	import Icon from 'svelte-awesome';
+	import google from 'svelte-awesome/icons/google';
 </script>
 
-
 <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-	<div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+	<div class="bg-white py-8 px-4 sm:px-10">
 		<form class="space-y-6" action="#" method="POST">
 			<div>
 				<label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
@@ -51,12 +50,14 @@
 				</div>
 			</div>
 
-			<div><a href="admin/review-students" class="text-white">
-				<button
-					type="submit"
-					class="w-full transition-all hover:scale-105 hover:bg-primary flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white  bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-					>Sign in</button
-				></a>
+			<div>
+				<a href="admin/review-students" class="text-white">
+					<button
+						type="submit"
+						class="w-full transition-all hover:scale-105 hover:bg-primary flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white  bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+						>Sign in</button
+					></a
+				>
 			</div>
 		</form>
 
@@ -92,7 +93,7 @@
 						href="#"
 						class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
 					>
-          <Icon data={google} scale={1.3}/>
+						<Icon data={google} scale={1.3} />
 					</a>
 				</div>
 			</div>

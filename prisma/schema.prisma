@@ -11,37 +11,42 @@ datasource db {
 }
 
 model User {
-  id             String               @id
-  email          String               @unique
-  userType       UserType
-  displayName    String
-  approvalStatus ApprovalStatus       @default(PENDING)
-  userDetails    PersonalInformation?
+  id              String               @id
+  email           String               @unique
+  userType        UserType
+  displayName     String
+  profileImageUrl String
+  approvalStatus  ApprovalStatus       @default(PENDING)
+  userDetails     PersonalInformation?
 
   // SPONSOR FIELDS
   scholarshipProgram ScholarshipProgram[]
   grantProgram       GrantProgram[]
-  organization       OrganizationInfo[]
+  organization       OrganizationInfo?
 
   // STUDENT FIELDS
   scholarshipApplications StudentApplication[]
+  activityLogs            ActityLog[]
 }
 
 model PersonalInformation {
-  id            Int               @id @default(autoincrement())
-  firstName     String
-  middleName    String?
-  lastName      String
-  maritalStatus MaritalStatus
-  gender        Gender
-  dateOfBirth   DateTime
-  registeredOn  DateTime          @default(now())
-  addressOne    String
-  addressTwo    String?
-  city          String
-  province      String
-  phoneNumber   String
-  relationship  RelationshipInfo?
+  id                   Int               @id @default(autoincrement())
+  firstName            String
+  middleName           String?
+  lastName             String
+  maritalStatus        MaritalStatus
+  gender               Gender
+  dateOfBirth          DateTime
+  registeredOn         DateTime          @default(now())
+  addressOne           String
+  addressTwo           String?
+  city                 String
+  state                String
+  country              String
+  phoneNumber          String
+  relationship         RelationshipInfo?
+  reasonForApplication String
+  facebookUrl          String?
 
   // USER REFERENCE
   user   User   @relation(fields: [userId], references: [id])
@@ -77,7 +82,8 @@ model ScholarshipProgram {
 
   address     String
   city        String
-  province    String
+  state       String
+  country     String
   email       String?
   phoneNumber String?
   website     String?
@@ -101,7 +107,8 @@ model GrantProgram {
 
   address     String
   city        String
-  province    String
+  state       String
+  country     String
   email       String?
   phoneNumber String?
   website     String?
@@ -118,12 +125,13 @@ model OrganizationInfo {
   description   String
   address       String
   city          String
-  province      String
+  state         String
+  country       String
   email         String?
   phoneNumber   String?
   website       String?
   sponsorUser   User    @relation(fields: [sponsorUserId], references: [id])
-  sponsorUserId String
+  sponsorUserId String  @unique
 }
 
 model StudentApplication {
@@ -144,6 +152,14 @@ model StudentApplication {
   // GRANT PROGRAM REFERENCE
   grantProgram   GrantProgram? @relation(fields: [grantProgramId], references: [id])
   grantProgramId Int?
+}
+
+model ActityLog {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @default(now())
+  description String
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @unique
 }
 
 enum ScholarshipType {

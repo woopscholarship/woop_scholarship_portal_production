@@ -13,12 +13,11 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 	const user: any = {
 		id: faker.datatype.uuid(),
 		email: faker.internet.email(),
+		profileImageUrl: faker.image.avatar(),
 		userType: userType ? userType : faker.helpers.arrayElement(['STUDENT', 'SPONSOR']),
 		approvalStatus: faker.helpers.arrayElement(['PENDING', 'APPROVED', 'REJECTED']),
-		displayName: `${firstName} ${lastName}`,
+		displayName: `${firstName} ${lastName}`
 	};
-
-
 
 	if (user.userType === 'STUDENT') {
 		user.userDetails = {
@@ -30,7 +29,8 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				dateOfBirth: faker.date.past(),
 				addressOne: faker.address.streetAddress(),
 				city: faker.address.cityName(),
-				province: faker.address.state(),
+				state: faker.address.state(),
+				country: faker.address.country(),
 				phoneNumber: faker.phone.number(),
 				relationship: {
 					create: {
@@ -43,7 +43,9 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 						fatherOccupation: faker.name.jobTitle(),
 						fatherPhone: faker.phone.number()
 					}
-				}
+				},
+				reasonForApplication: faker.lorem.paragraph(),
+				facebookUrl: faker.internet.url()
 			}
 		};
 	}
@@ -58,7 +60,9 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				dateOfBirth: faker.date.past(),
 				addressOne: faker.address.streetAddress(),
 				city: faker.address.cityName(),
-				province: faker.address.state(),
+				state: faker.address.state(),
+				country: faker.address.country(),
+				reasonForApplication: faker.lorem.paragraph(),
 				phoneNumber: faker.phone.number()
 			}
 		};
@@ -70,7 +74,8 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				description: faker.lorem.paragraph(),
 				address: faker.address.streetAddress(),
 				city: faker.address.cityName(),
-				province: faker.address.state(),
+				state: faker.address.state(),
+				country: faker.address.country(),
 				phoneNumber: faker.phone.number(),
 				email: faker.internet.email(),
 				website: faker.internet.url()
@@ -103,7 +108,8 @@ function createScholarshipProgram() {
 
 		address: faker.address.streetAddress(),
 		city: faker.address.cityName(),
-		province: faker.address.state(),
+		state: faker.address.state(),
+		country: faker.address.country(),
 		phoneNumber: faker.phone.number(),
 		email: faker.internet.email(),
 		website: faker.internet.url()
@@ -124,7 +130,8 @@ function createGrantProgram() {
 		reviewStatus: faker.helpers.arrayElement(['PENDING', 'APPROVED', 'REJECTED']),
 		address: faker.address.streetAddress(),
 		city: faker.address.cityName(),
-		province: faker.address.state(),
+		state: faker.address.state(),
+		country: faker.address.country(),
 		phoneNumber: faker.phone.number(),
 		email: faker.internet.email(),
 		website: faker.internet.url()

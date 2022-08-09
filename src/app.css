@@ -2,19 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
-  *{
-    @apply box-border
-  }
+	* {
+		@apply box-border;
+	}
 
-  body, html {
-    @apply overflow-x-hidden;
-  }
+	body,
+	html {
+		@apply overflow-x-hidden;
+	}
 
-  a {
-    @apply text-primary no-underline
-  }
+	a {
+		@apply text-primary no-underline;
+	}
 }
-

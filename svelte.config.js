@@ -6,14 +6,14 @@ const config = {
 	// Consult https://github.com/sveltejs/svelte-preprocess
 	// for more information about preprocessors
 	preprocess: preprocess({
-		postcss: true,
+		postcss: true
 	}),
 
 	kit: {
 		adapter: adapter(),
 		alias: {
-			'$root': './src',
-			'$stores': './src/stores',
+			$root: './src',
+			$stores: './src/stores'
 		}
 	}
 };
