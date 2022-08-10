@@ -18,6 +18,7 @@ model User {
   profileImageUrl String
   approvalStatus  ApprovalStatus       @default(PENDING)
   userDetails     PersonalInformation?
+  registeredOn    DateTime             @default(now())
 
   // SPONSOR FIELDS
   scholarshipProgram ScholarshipProgram[]
@@ -37,7 +38,6 @@ model PersonalInformation {
   maritalStatus        MaritalStatus
   gender               Gender
   dateOfBirth          DateTime
-  registeredOn         DateTime          @default(now())
   addressOne           String
   addressTwo           String?
   city                 String
@@ -46,7 +46,12 @@ model PersonalInformation {
   phoneNumber          String
   relationship         RelationshipInfo?
   reasonForApplication String
+  validIdUrl           String?
   facebookUrl          String?
+
+  // Student Fields
+  degreeLevel   DegreeLevel?
+  degreeProgram String?
 
   // USER REFERENCE
   user   User   @relation(fields: [userId], references: [id])
@@ -55,10 +60,12 @@ model PersonalInformation {
 
 model RelationshipInfo {
   id               Int     @id @default(autoincrement())
+  motherPhotoUrl   String?
   motherFirstName  String?
   motherLastName   String?
   motherOccupation String?
   motherPhone      String?
+  fatherPhotoUrl   String?
   fatherFirstName  String?
   fatherLastName   String?
   fatherPhone      String?

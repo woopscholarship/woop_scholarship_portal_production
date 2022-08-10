@@ -15,6 +15,7 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 		email: faker.internet.email(),
 		profileImageUrl: faker.image.avatar(),
 		userType: userType ? userType : faker.helpers.arrayElement(['STUDENT', 'SPONSOR']),
+		registeredOn: faker.date.past(),
 		approvalStatus: faker.helpers.arrayElement(['PENDING', 'APPROVED', 'REJECTED']),
 		displayName: `${firstName} ${lastName}`
 	};
@@ -34,18 +35,23 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				phoneNumber: faker.phone.number(),
 				relationship: {
 					create: {
+						motherPhotoUrl: faker.image.avatar(),
 						motherFirstName: faker.name.firstName(),
 						motherLastName: faker.name.lastName(),
 						motherOccupation: faker.name.jobTitle(),
 						motherPhone: faker.phone.number(),
+						fatherPhotoUrl: faker.image.avatar(),
 						fatherFirstName: faker.name.firstName(),
 						fatherLastName: faker.name.lastName(),
 						fatherOccupation: faker.name.jobTitle(),
 						fatherPhone: faker.phone.number()
 					}
 				},
+				degreeLevel: faker.helpers.arrayElement(['UNDERGRADUATE', 'GRADUATE', 'POST_GRADUATE']),
+				degreeProgram: faker.name.jobTitle(),
 				reasonForApplication: faker.lorem.paragraph(),
-				facebookUrl: faker.internet.url()
+				facebookUrl: faker.internet.url(),
+				validIdUrl: faker.image.abstract()
 			}
 		};
 	}
