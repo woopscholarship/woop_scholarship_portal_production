@@ -31,3 +31,30 @@ export const sponsorRoutes = [
     href: '/sponsor/review-sponsors'
   },
 ];
+
+export const studentRoutes = {
+  profile: [
+    {
+      text: 'Profile',
+      href: '/student/profile'
+    },
+    {
+      text: 'Settings',
+      href: '/student/settings'
+    },
+  ],
+  main: [
+    {
+      text: 'Dashboard',
+      href: '/student/dashboard'
+    },
+    {
+      text: 'Apply Scholarship',
+      href: '/student/apply-scholarship'
+    },
+    {
+      text: 'Applied Scholarship',
+      href: '/student/applied-scholarship'
+    },
+  ]
+}
