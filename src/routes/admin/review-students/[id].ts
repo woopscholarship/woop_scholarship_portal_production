@@ -4,6 +4,7 @@ import type { UserDetails } from '$root/utils/prisma';
 
 export const GET: RequestHandler = async ({ params }) => {
   const data: UserDetails = await GetUserDetails(params.id);
+
 	return {
 		headers: { 'Content-Type': 'application/json' },
 		status: 200,

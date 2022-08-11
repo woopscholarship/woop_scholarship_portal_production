@@ -84,7 +84,7 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				country: faker.address.country(),
 				phoneNumber: faker.phone.number(),
 				email: faker.internet.email(),
-				website: faker.internet.url()
+				website: faker.internet.url(),
 			}
 		};
 	}
@@ -109,6 +109,8 @@ function createScholarshipProgram() {
 		postedOn: faker.date.past(),
 		degreeLevel: faker.helpers.arrayElement(['UNDERGRADUATE', 'GRADUATE', 'POST_GRADUATE']),
 		maxApplicants: +faker.random.numeric(3),
+		scholarshipType: faker.helpers.arrayElement(['ACADEMIC', 'SPORTS', 'ESSAY', 'OTHER']),
+		programType: faker.helpers.arrayElement(['GRANT', 'SCHOLARSHIP']),
 		status: faker.helpers.arrayElement(['OPEN', 'CLOSED']),
 		reviewStatus: faker.helpers.arrayElement(['PENDING', 'APPROVED', 'REJECTED']),
 
@@ -134,6 +136,8 @@ function createGrantProgram() {
 		maxApplicants: +faker.random.numeric(3),
 		status: faker.helpers.arrayElement(['OPEN', 'CLOSED']),
 		reviewStatus: faker.helpers.arrayElement(['PENDING', 'APPROVED', 'REJECTED']),
+		programType: faker.helpers.arrayElement(['GRANT', 'SCHOLARSHIP']),
+
 		address: faker.address.streetAddress(),
 		city: faker.address.cityName(),
 		state: faker.address.state(),

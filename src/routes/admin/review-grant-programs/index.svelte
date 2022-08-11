@@ -5,14 +5,25 @@
 	import { Label } from '@smui/common';
 	import StatusBadge from '$root/components/statusBadge.svelte';
 	import { page } from '$app/stores';
-	import type { ScholarshipProgram, User } from '@prisma/client';
+	import type { ScholarshipProgram, GrantProgram, User } from '@prisma/client';
 	import { onMount } from 'svelte';
 
 	interface ScholarshipPrograms extends ScholarshipProgram {
 		sponsorUser: User;
 	}
 
-	export let scholarshipPrograms: ScholarshipPrograms[];
+	interface GrantPrograms extends GrantProgram {
+		sponsorUser: User;
+	}
+
+
+	export let scholarshipPrograms: ScholarshipPrograms[] | GrantPrograms[];
+
+
+	onMount(() => {
+		console.log(scholarshipPrograms[39])
+	})
+
 
 	let rowsPerPage = 10;
 	let currentPage = 0;
@@ -25,36 +36,19 @@
 	$: if (currentPage > lastPage) {
 		currentPage = lastPage;
 	}
+
 </script>
-
-<h2 class="text-gray-700 text-lg font-semibold">Filter</h2>
-<form method="POST" class="flex item-center justify-center my-4 gap-4" action={$page.url.pathname}>
-	<select
-		id="status"
-		name="status"
-		class="flex-1 w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md border"
-	>
-		<option value="APPROVED" selected>APPROVED</option>
-		<option value="PENDING">PENDING</option>
-		<option value="REJECTED">REJECTED</option>
-	</select>
-
-	<input
-		type="submit"
-		class="flex-2  ursor-pointer h-auto px-10 py-2 bg-primary text-white "
-		value="FILTER"
-	/>
-</form>
 
 <DataTable table$aria-label="Todo list" style="width: 100%;">
 	<Head>
 		<Row>
-			<Cell>ID</Cell>
-			<Cell>Sponsor</Cell>
 			<Cell>Scholarship Name</Cell>
-			<Cell>Status</Cell>
+			<Cell>Sponsor</Cell>
 			<Cell>Program Type</Cell>
+			<Cell>Max Applicants</Cell>
 			<Cell>Location</Cell>
+			<Cell>Status</Cell>
+			<Cell>Scholarship Type</Cell>
 		</Row>
 	</Head>
 	<Body>
@@ -62,25 +56,16 @@
 			<p class="text-center p-4 bg-red-200">NO SCHOLARSHIP DATA FOUND</p>
 		{:else}
 			{#each slice as item (item.id)}
-				<Row>
-					<Cell>{item.id}</Cell>
-					<Cell class="p-4">
-						<div><img class="rounded" src={item.sponsorUser.profileImageUrl} alt="" /></div>
-						<div>{item.sponsorUser.displayName}</div>
-						<div class="text-xs text-gray-700">{item.sponsorUser.email}</div>
-					</Cell>
+				<Row >
 					<Cell>{item.name}</Cell>
-					<Cell><StatusBadge status={item.reviewStatus} /></Cell>
-					<Cell>{item.scholarshipType}</Cell>
 					<Cell>
-						{item.city}, {item.state}, {item.country}
+						<div>{item.sponsorUser.displayName}</div>
+						<div>{item.sponsorUser.email}</div>
 					</Cell>
-
-					<Cell
-						><a class="p-4 py-2 bg-primary text-white" href={`${$page.url.pathname}/${item.id}`}
-							>Review</a
-						></Cell
-					>
+					<Cell>{item.scholarshipType ?? 'N/A'}</Cell>
+					<Cell>{item.id}</Cell>
+					<Cell>{item.id}</Cell>
+					<Cell>{item.id}</Cell>
 				</Row>
 			{/each}
 		{/if}

@@ -31,10 +31,10 @@
 <h2 class="text-gray-700 text-lg font-semibold">Filter</h2>
 <form
 	method="POST"
-	class="flex item-center justify-center border my-4 gap-4"
+	class="flex item-center justify-center my-4 gap-4"
 	action={`${$page.url.pathname}`}
 >
-	<input class="flex-1 px-2" id="email" name="email" type="text" placeholder="Email Address" />
+	<input class="flex-1 px-2 border rounded" id="email" name="email" type="text" placeholder="Email Address" />
 
 	<select
 		id="status"
@@ -45,16 +45,17 @@
 		<option value="PENDING">PENDING</option>
 		<option value="REJECTED">REJECTED</option>
 	</select>
-	<input id="date" name="date" max={'2022-02-01'} type="datetime-local" class="flex-1 p-2" />
+	<input id="date" name="date" max={'2022-02-01'} type="datetime-local" class="flex-1 p-2 border rounded" />
 
 	<input
 		type="submit"
-		class="flex-2  ursor-pointer h-auto px-10 py-2 bg-primary text-white"
+		class="flex-2  ursor-pointer h-auto px-10 py-2 bg-primary text-white "
 		value="FILTER"
 	/>
 </form>
 
-<DataTable table$aria-label="Todo list" style="width: 100%;">
+<DataTable style="width: 100%;">
+	
 	<Head>
 		<Row>
 			<Cell />

@@ -23,6 +23,10 @@
 			href: '/admin/review-scholarship-programs'
 		},
 		{
+			text: 'Review Grant Programs',
+			href: '/admin/review-grant-programs'
+		},
+		{
 			text: 'Review Student Applications',
 			href: '/admin/review-student-applications'
 		}
@@ -32,7 +36,7 @@
 <div transition:fade class="flex border w-screen min-h-screen">
 	<!-- This example requires Tailwind CSS v2.0+ -->
 	<div class="flex flex-col flex-grow w-[20%] pt-5 pb-4 bg-white ">
-		<div class="flex items-center flex-shrink-0 px-4 space-y-5">
+		<div class="flex justify-center flex-shrink-0 px-4 space-y-5">
 			<img
 				src="https://woopscholarship.com/wp-content/uploads/2022/06/logotype-wcolor-1.jpg"
 				alt="woop Scholarship"
@@ -41,7 +45,7 @@
 			/>
 		</div>
 		<div class="mt-5 flex-grow flex flex-col">
-			<nav class="flex-1 bg-white space-y-1" aria-label="Sidebar">
+			<nav class="flex-1 pl-6 pr-6 bg-white space-y-1" aria-label="Sidebar">
 				{#each navigationItems as item}
 					<NavigationItem text={item.text} href={item.href} />
 				{/each}

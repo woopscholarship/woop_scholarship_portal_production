@@ -18,6 +18,63 @@ export const GetUsers = async (userType: 'ADMIN' | 'SPONSOR' | 'STUDENT') => {
 	return users;
 };
 
+// Get Scholarship Programs And Grants
+export const GetScholarshipPrograms = async (
+	reviewStatus: 'APPROVED' | 'REJECTED' | 'PENDING' = 'PENDING',
+	email?: string
+) => {
+	if (email) {
+		const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
+			where: {
+				reviewStatus: {
+					equals: reviewStatus
+				}
+			},
+			include: {
+				sponsorUser: true
+			}
+		});
+	}
+
+	const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
+		where: {
+			reviewStatus: {
+				equals: reviewStatus
+			}
+		},
+		include: {
+			sponsorUser: true
+		}
+	});
+
+	return scholarshipPrograms;
+};
+
+export const GetScholarshipProgramDetails = async (id: string) => {
+	const scholarshipPrograms = await prisma.scholarshipProgram.findFirst({
+		where: {
+			id: {
+				equals: +id
+			}
+		},
+		include: {
+			sponsorUser: true
+		}
+	});
+
+	return scholarshipPrograms;
+};
+
+export const GetGrantPrograms = async () => {
+	const grantPrograms = await prisma.grantProgram.findMany({
+		include: {
+			sponsorUser: true
+		}
+	});
+
+	return grantPrograms;
+};
+
 // Get User Details By ID
 export const GetUserDetails = async (userId: string): Promise<UserDetails> => {
 	const user = <User>await prisma.user.findFirst({
@@ -73,7 +130,6 @@ export const filterUserTable = async (
 	date: string,
 	email: string
 ) => {
-
 	// When Email is inputted search by ignoring approval status
 	if (email !== '') {
 		const users = await prisma.user.findMany({
@@ -97,7 +153,7 @@ export const filterUserTable = async (
 			},
 			approvalStatus: {
 				equals: status
-			},
+			}
 		}
 	});
 

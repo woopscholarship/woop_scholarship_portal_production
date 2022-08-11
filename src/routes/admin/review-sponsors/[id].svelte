@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import type { User, PersonalInformation, RelationshipInfo, OrganizationInfo } from '@prisma/client';
-	import ReviewSection from '$root/components/admin/review/reviewSection.svelte';
+	import ReviewDetailsTable from '$root/components/admin/review/reviewDetailsTable.svelte';
+	import type { OrganizationInfo, User, PersonalInformation, RelationshipInfo } from '@prisma/client';
 
 	interface UserDetails extends PersonalInformation {
 		relationship: RelationshipInfo;
@@ -12,19 +11,7 @@
 	export let organization: OrganizationInfo;
 
 
-	interface SectionItems {
-		sectionTitle: {
-			title: string;
-			subtitle: string;
-		};
-		items: {
-			label: string;
-			value: any;
-			type?: 'text' | 'image' | null;
-		}[];
-	}
-
-	const sectionItems: SectionItems[] = [
+	const sectionItems = [
 		{
 			sectionTitle: {
 				title: 'User Details',
@@ -176,7 +163,7 @@
 				{
 					label: 'Description',
 					value: organization.description
-				},
+				}
 			]
 		},
 
@@ -193,30 +180,9 @@
 			]
 		}
 	];
+
+	const profileImageUrl = user.profileImageUrl;
 </script>
 
-<div class="bg-white shadow overflow-hidden sm:rounded-lg">
-	<div>
-		<img class="m-6 w-64 h-auto" src={user.profileImageUrl} alt="" />
-	</div>
+<ReviewDetailsTable {sectionItems} {profileImageUrl} />
 
-	{#each sectionItems as section}
-		<ReviewSection {...section} />
-	{/each}
-</div>
-
-<form method="POST" class="mt-4 w-1/4" action={`${$page.url.pathname}`}>
-	<div>
-		<label for="status" class="block font-medium text-gray-700 text-lg">Status</label>
-		<select
-			id="status"
-			name="status"
-			class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md border"
-		>
-			<option value="REJECTED">Reject</option>
-			<option value="APPROVED">Approve</option>
-		</select>
-	</div>
-
-	<input type="submit" class="cursor-pointer mt-4 px-10 py-2 bg-primary text-white" value="SUBMIT" >
-</form>
