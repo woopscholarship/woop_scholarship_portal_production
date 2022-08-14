@@ -1,13 +1,15 @@
 <script lang="ts">
 	import ReviewDetailsTable from '$root/components/admin/review/reviewDetailsTable.svelte';
-	import type { ScholarshipProgram, User } from '@prisma/client';
-
-	interface ScholarshipPrograms extends ScholarshipProgram {
+	import type { GrantProgram, User } from '@prisma/client';
+	
+	interface GrantPrograms extends GrantProgram {
 		sponsorUser: User;
 	}
 
-	export let scholarshipProgram: ScholarshipPrograms;
-	console.log(scholarshipProgram);
+	
+	export let grantProgram: GrantPrograms;
+	const profileImageUrl = grantProgram.sponsorUser.profileImageUrl;
+
 
 	const sectionItems = [
 		{
@@ -18,55 +20,55 @@
 			items: [
 				{
 					label: 'Name',
-					value: scholarshipProgram.name,
+					value: grantProgram.name,
 				},
 				{
 					label: 'Email',
-					value: scholarshipProgram.email,
+					value: grantProgram.name,
 				},
 				{
 					label: 'Description',
-					value: scholarshipProgram.description,
+					value: grantProgram.description,
 				},
 				{
 					label: 'Degree Level',
-					value: scholarshipProgram.degreeLevel,
+					value: grantProgram.degreeLevel,
 				},
 				{
 					label: 'Max Applicants',
-					value: scholarshipProgram.maxApplicants,
+					value: grantProgram.maxApplicants,
 				},
 				{
 					label: 'Address',
-					value: scholarshipProgram.address,
+					value: grantProgram.address,
 				},
 				{
 					label: 'City',
-					value: scholarshipProgram.city,
+					value: grantProgram.city,
 				},
 				{
 					label: 'State',
-					value: scholarshipProgram.state,
+					value: grantProgram.state,
 				},
 				{
 					label: 'Country',
-					value: scholarshipProgram.country,
+					value: grantProgram.country,
 				},
 				{
 					label: 'Email',
-					value: scholarshipProgram.email,
+					value: grantProgram.email,
 				},
 				{
 					label: 'Phone Number',
-					value: scholarshipProgram.phoneNumber,
+					value: grantProgram.phoneNumber,
 				},
 				{
 					label: 'Website',
-					value: scholarshipProgram.website,
+					value: grantProgram.website,
 				},
 				{
 					label: 'Review Status',
-					value: scholarshipProgram.reviewStatus,
+					value: grantProgram.reviewStatus,
 				},
 			]
 		},
@@ -78,21 +80,25 @@
 			items: [
 				{
 					label: 'Name',
-					value: scholarshipProgram.sponsorUser.displayName,
+					value: grantProgram.sponsorUser.displayName,
 				},
 				{
 					label: 'Email',
-					value: scholarshipProgram.sponsorUser.email,
+					value: grantProgram.sponsorUser.email,
 				},
 				{
 					label: 'Registered On',
-					value: scholarshipProgram.sponsorUser.registeredOn,
+					value: grantProgram.sponsorUser.registeredOn,
 				},
 			]
 		}
 	];
 
-	const profileImageUrl = scholarshipProgram.sponsorUser.profileImageUrl;
+
+
+
+
+
 </script>
 
 <ReviewDetailsTable {sectionItems} {profileImageUrl} />

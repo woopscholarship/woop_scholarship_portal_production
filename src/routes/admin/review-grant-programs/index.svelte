@@ -5,23 +5,18 @@
 	import { Label } from '@smui/common';
 	import StatusBadge from '$root/components/statusBadge.svelte';
 	import { page } from '$app/stores';
-	import type { ScholarshipProgram, GrantProgram, User } from '@prisma/client';
+	import type { GrantProgram, User } from '@prisma/client';
 	import { onMount } from 'svelte';
-
-	interface ScholarshipPrograms extends ScholarshipProgram {
-		sponsorUser: User;
-	}
 
 	interface GrantPrograms extends GrantProgram {
 		sponsorUser: User;
 	}
 
-
-	export let scholarshipPrograms: ScholarshipPrograms[] | GrantPrograms[];
+	export let grantPrograms: GrantPrograms[];
 
 
 	onMount(() => {
-		console.log(scholarshipPrograms[39])
+		console.log('grantPrograms', grantPrograms);
 	})
 
 
@@ -29,43 +24,67 @@
 	let currentPage = 0;
 
 	$: start = currentPage * rowsPerPage;
-	$: end = Math.min(start + rowsPerPage, scholarshipPrograms.length);
-	$: slice = scholarshipPrograms.slice(start, end);
-	$: lastPage = Math.max(Math.ceil(scholarshipPrograms.length / rowsPerPage) - 1, 0);
+	$: end = Math.min(start + rowsPerPage, grantPrograms.length);
+	$: slice = grantPrograms.slice(start, end);
+	$: lastPage = Math.max(Math.ceil(grantPrograms.length / rowsPerPage) - 1, 0);
 
 	$: if (currentPage > lastPage) {
 		currentPage = lastPage;
 	}
-
 </script>
+
+<h2 class="text-gray-700 text-lg font-semibold">Filter</h2>
+<form method="POST" class="flex item-center justify-center my-4 gap-4" action={$page.url.pathname}>
+	<select
+		id="status"
+		name="status"
+		class="flex-1 w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md border"
+	>
+		<option value="APPROVED" selected>APPROVED</option>
+		<option value="PENDING">PENDING</option>
+		<option value="REJECTED">REJECTED</option>
+	</select>
+
+	<input
+		type="submit"
+		class="flex-2  ursor-pointer h-auto px-10 py-2 bg-primary text-white "
+		value="FILTER"
+	/>
+</form>
 
 <DataTable table$aria-label="Todo list" style="width: 100%;">
 	<Head>
 		<Row>
-			<Cell>Scholarship Name</Cell>
+			<Cell>ID</Cell>
 			<Cell>Sponsor</Cell>
-			<Cell>Program Type</Cell>
-			<Cell>Max Applicants</Cell>
-			<Cell>Location</Cell>
+			<Cell>Scholarship Name</Cell>
 			<Cell>Status</Cell>
-			<Cell>Scholarship Type</Cell>
+			<Cell>Location</Cell>
 		</Row>
 	</Head>
 	<Body>
-		{#if scholarshipPrograms.length === 0}
-			<p class="text-center p-4 bg-red-200">NO SCHOLARSHIP DATA FOUND</p>
+		{#if grantPrograms.length === 0}
+			<p class="text-center p-4 bg-red-200">NO Grant Program DATA FOUND</p>
 		{:else}
 			{#each slice as item (item.id)}
-				<Row >
-					<Cell>{item.name}</Cell>
-					<Cell>
+				<Row>
+					<Cell>{item.id}</Cell>
+					<Cell class="p-4">
+						<div><img class="rounded" src={item.sponsorUser.profileImageUrl} alt="" /></div>
 						<div>{item.sponsorUser.displayName}</div>
-						<div>{item.sponsorUser.email}</div>
+						<div class="text-xs text-gray-700">{item.sponsorUser.email}</div>
 					</Cell>
-					<Cell>{item.scholarshipType ?? 'N/A'}</Cell>
-					<Cell>{item.id}</Cell>
-					<Cell>{item.id}</Cell>
-					<Cell>{item.id}</Cell>
+					<Cell>{item.name}</Cell>
+					<Cell><StatusBadge status={item.reviewStatus} /></Cell>
+					<Cell>
+						{item.city}, {item.state}, {item.country}
+					</Cell>
+
+					<Cell
+						><a class="p-4 py-2 bg-primary text-white" href={`${$page.url.pathname}/${item.id}`}
+							>Review</a
+						></Cell
+					>
 				</Row>
 			{/each}
 		{/if}
@@ -81,7 +100,7 @@
 			</Select>
 		</svelte:fragment>
 		<svelte:fragment slot="total">
-			{start + 1}-{end} of {scholarshipPrograms.length}
+			{start + 1}-{end} of {grantPrograms.length}
 		</svelte:fragment>
 
 		<IconButton

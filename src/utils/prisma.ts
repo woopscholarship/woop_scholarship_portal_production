@@ -7,18 +7,8 @@ export type UserDetails = {
 	organization?: OrganizationInfo;
 };
 
-// Get All Users By User Type
-export const GetUsers = async (userType: 'ADMIN' | 'SPONSOR' | 'STUDENT') => {
-	const users = await prisma.user.findMany({
-		where: {
-			userType: userType,
-			approvalStatus: 'PENDING'
-		}
-	});
-	return users;
-};
+// SCHOLARSHIP METHODS
 
-// Get Scholarship Programs And Grants
 export const GetScholarshipPrograms = async (
 	reviewStatus: 'APPROVED' | 'REJECTED' | 'PENDING' = 'PENDING',
 	email?: string
@@ -34,6 +24,8 @@ export const GetScholarshipPrograms = async (
 				sponsorUser: true
 			}
 		});
+
+		return scholarshipPrograms;
 	}
 
 	const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
@@ -75,7 +67,49 @@ export const GetGrantPrograms = async () => {
 	return grantPrograms;
 };
 
-// Get User Details By ID
+export const GetGrantProgramDetails = async (id: string) => {
+	const grantProgram = await prisma.grantProgram.findFirst({
+		where: {
+			id: {
+				equals: +id
+			}
+		},
+		include: {
+			sponsorUser: true
+		}
+	});
+
+	return grantProgram;
+};
+
+export const UpdateScholarshipProgramApprovalStatus = async (
+	id: number,
+	status: 'APPROVED' | 'REJECTED'
+) => {
+	const scholarshipProgram = await prisma.scholarshipProgram.update({
+		where: {
+			id: id
+		},
+		data: {
+			reviewStatus: status
+		}
+	});
+
+	return scholarshipProgram;
+};
+
+// USER METHODS
+
+export const GetUsers = async (userType: 'ADMIN' | 'SPONSOR' | 'STUDENT') => {
+	const users = await prisma.user.findMany({
+		where: {
+			userType: userType,
+			approvalStatus: 'PENDING'
+		}
+	});
+	return users;
+};
+
 export const GetUserDetails = async (userId: string): Promise<UserDetails> => {
 	const user = <User>await prisma.user.findFirst({
 		where: { id: userId }
