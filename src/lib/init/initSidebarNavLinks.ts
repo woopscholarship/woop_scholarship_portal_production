@@ -23,12 +23,16 @@ export const adminRoutes = [
 
 export const sponsorRoutes = [
   {
-    text: 'Review Students',
-    href: '/sponsor/review-students'
+    text: 'Student Applications',
+    href: '/sponsor/student-applications'
   },
   {
-    text: 'Review Sponsors',
-    href: '/sponsor/review-sponsors'
+    text: 'Scholarship Programs',
+    href: '/sponsor/scholarship-programs'
+  },
+  {
+    text: 'Launch New Program',
+    href: '/sponsor/launch-new-programs'
   },
 ];
 

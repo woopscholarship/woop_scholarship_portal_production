@@ -16,6 +16,7 @@ module.exports = {
 			neutral: '#fafafa',
 			darkBlue: '#293e72',
 			dark: '#0c1c44',
+			active: '#E1E6F0',
 			...colors
 		},
 		extend: {}
