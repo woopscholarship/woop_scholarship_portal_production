@@ -6,7 +6,6 @@
 	import StatusBadge from '$root/components/statusBadge.svelte';
 	import { page } from '$app/stores';
 	import type { ScholarshipProgram, User } from '@prisma/client';
-	import { onMount } from 'svelte';
 
 	interface ScholarshipPrograms extends ScholarshipProgram {
 		sponsorUser: User;
