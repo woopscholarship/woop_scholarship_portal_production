@@ -10,7 +10,6 @@ export const GET: RequestHandler = async () => {
 	};
 }
 
-
 export const POST: RequestHandler = async ({ request }) => {
 	const form = await request.formData();
 	const status = <'APPROVED' | 'REJECTED' | 'PENDING'>String(form.get('status'));

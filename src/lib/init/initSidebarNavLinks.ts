@@ -32,7 +32,7 @@ export const sponsorRoutes = [
   },
   {
     text: 'Launch New Program',
-    href: '/sponsor/launch-new-programs'
+    href: '/sponsor/launch-new-program'
   },
 ];
 

@@ -12,11 +12,11 @@
 	}[];
 
 	onMount(() => {
-		if ($page.url.pathname.includes('admin')) {
+		if ($page.url.pathname.includes('/admin')) {
 			routes = adminRoutes;
 		}
 
-		if ($page.url.pathname.includes('sponsor')) {
+		if ($page.url.pathname.includes('/sponsor')) {
 			routes = sponsorRoutes;
 		}
 
