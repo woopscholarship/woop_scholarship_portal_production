@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Moon } from 'svelte-loading-spinners';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte/internal';
 
@@ -22,6 +23,21 @@
 
 		console.log(routes);
 	});
+
+	let controlsLayout = [
+		'previousFrame',
+		'playpause',
+		'stop',
+		'nextFrame',
+		'progress',
+		'frame',
+		'loop',
+		'spacer',
+		'background',
+		'snapshot',
+		'zoom',
+		'info'
+	];
 </script>
 
 {#if routes}
@@ -64,5 +80,7 @@
 		</main>
 	</div>
 {:else}
-	Loading...
+	<div class="flex justify-center items-center w-screen h-screen">
+		<Moon size="60" color="#0fb7a6" unit="px" duration="1s" />
+	</div>
 {/if}
