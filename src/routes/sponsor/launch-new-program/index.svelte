@@ -1,7 +1,11 @@
 <script lang='ts'>
 import type { ScholarshipProgram } from "@prisma/client";
 
+export let scholarshipProgram;
+
 $: selectedType = "SCHOLARSHIP";
+console.log(scholarshipProgram);
+
 
 function changeType() {
   selectedType =   (<HTMLInputElement>document.querySelector('#programType')!).value
@@ -9,7 +13,7 @@ function changeType() {
 
 </script>
 
-<form class="w-1/2 flex flex-col gap-1" action="/launch-new-program" method="POST">
+<form class="w-1/2 flex flex-col gap-1" action="/sponsor/launch-new-program" method="POST">
 
 
 
@@ -53,7 +57,7 @@ function changeType() {
 
 
     <div class="flex flex-col gap-2">
-      <label for="scholarshipType">Max Applicants</label>
+      <label for="scholarshipType">Scholarship Type</label>
       <select name="scholarshipType" id="scholarshipType">
         <option value="ACADEMIC">ACADEMIC</option>
         <option value="SPORTS">SPORTS</option>

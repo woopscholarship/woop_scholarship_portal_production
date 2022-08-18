@@ -41,8 +41,6 @@
 		currentPage = lastPage;
 	}
 
-
-
 </script>
 
 <Topbar
@@ -51,11 +49,11 @@
 	userImageAddress={'https://i.ibb.co/fFj4t1s/IMG-6893.jpg'}
 />
 
-<Banner text="Your Program has 25 Applications" />
+<Banner text={`Your Program has ${applicants.length} Applications`} />
 
 <div class="flex flex-col mt-6">
 	<h2 class="font-bold text-lg mb-4">Programs</h2>
-	<form class="mb-4 flex gap-2" method="POST" action="/student-applications">
+	<form class="mb-4 flex gap-2" method="POST" action="sponsor/student-applications">
 		<select name="program" id="program">
 			{#each scholarshipPrograms as program}
 				<option value={program.id}>{program.name}</option>

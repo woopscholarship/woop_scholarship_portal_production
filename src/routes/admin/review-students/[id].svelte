@@ -74,7 +74,6 @@
 				}
 			]
 		},
-
 		{
 			sectionTitle: {
 				title: 'Contact Information',
