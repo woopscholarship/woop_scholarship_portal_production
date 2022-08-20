@@ -11,9 +11,9 @@
 	export let organization: OrganizationInfo;
 
 
-	const sectionItems = [
+	const tableData = [
 		{
-			sectionTitle: {
+			title: {
 				title: 'User Details',
 				subtitle: 'Primary account details '
 			},
@@ -37,7 +37,7 @@
 			]
 		},
 		{
-			sectionTitle: {
+			title: {
 				title: 'Personal Information',
 				subtitle: 'Personal details and application.'
 			},
@@ -78,7 +78,7 @@
 		},
 
 		{
-			sectionTitle: {
+			title: {
 				title: 'Contact Information',
 				subtitle: 'Contact details'
 			},
@@ -118,7 +118,7 @@
 			]
 		},
 		{
-			sectionTitle: {
+			title: {
 				title: 'Organization Information',
 				subtitle: 'Organization details and contact'
 			},
@@ -168,7 +168,7 @@
 		},
 
 		{
-			sectionTitle: {
+			title: {
 				title: 'Reason For Application',
 				subtitle: 'Application details'
 			},
@@ -184,5 +184,5 @@
 	const profileImageUrl = user.profileImageUrl;
 </script>
 
-<ReviewDetailsTable {sectionItems} {profileImageUrl} />
+<ReviewDetailsTable {tableData} {profileImageUrl} />
 

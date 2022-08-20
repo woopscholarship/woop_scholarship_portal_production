@@ -1,23 +1,17 @@
 <script lang="ts">
+	import type { GrantPrograms } from '$root/types/data';
+
+	import { page } from '$app/stores';
+
 	import DataTable, { Head, Body, Row, Cell, Pagination } from '@smui/data-table';
 	import Select, { Option } from '@smui/select';
 	import IconButton from '@smui/icon-button';
 	import { Label } from '@smui/common';
-	import StatusBadge from '$root/components/statusBadge.svelte';
-	import { page } from '$app/stores';
-	import type { GrantProgram, User } from '@prisma/client';
-	import { onMount } from 'svelte';
+	import Button from '$root/components/common/Button.svelte';
 
-	interface GrantPrograms extends GrantProgram {
-		sponsorUser: User;
-	}
+	import StatusBadge from '$root/components/statusBadge.svelte';
 
 	export let grantPrograms: GrantPrograms[];
-
-
-	onMount(() => {
-		console.log('grantPrograms', grantPrograms);
-	})
 
 
 	let rowsPerPage = 10;
@@ -31,6 +25,7 @@
 	$: if (currentPage > lastPage) {
 		currentPage = lastPage;
 	}
+
 </script>
 
 <h2 class="text-gray-700 text-lg font-semibold">Filter</h2>
@@ -45,11 +40,8 @@
 		<option value="REJECTED">REJECTED</option>
 	</select>
 
-	<input
-		type="submit"
-		class="flex-2  ursor-pointer h-auto px-10 py-2 bg-primary text-white "
-		value="FILTER"
-	/>
+	<Button buttonType='submit' value='Filter' />
+
 </form>
 
 <DataTable table$aria-label="Todo list" style="width: 100%;">

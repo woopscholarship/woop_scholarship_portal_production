@@ -1,36 +1,26 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import ReviewSection from '$root/components/admin/review/reviewSection.svelte';
-
-	interface SectionTitle {
-			title: string;
-			subtitle: string;
-		}
-
-	interface SectionItems {
-			label: string;
-			value: any;
-			type?: 'text' | 'image' | any;
-	}
-
-	interface Section {
-		sectionTitle: SectionTitle;
-		items: SectionItems[];
-	}
+	import type { TableData } from '$root/types/component';
+	import { Moon } from 'svelte-loading-spinners';
 
 	export let profileImageUrl: string;
-	export let sectionItems: Section[] = [];
+	export let tableData: TableData[] = [];
 </script>
 
-<div class="bg-white shadow overflow-hidden sm:rounded-lg">
-	<div>
-		<img class="m-6 w-64 h-auto" src={profileImageUrl} alt="" />
-	</div>
+{#if !tableData && !profileImageUrl}
+	<Moon size="60" color="#0fb7a6" unit="px" duration="1s" />
+{:else}
+	<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+		<div>
+			<img class="m-6 w-64 h-auto" src={profileImageUrl} alt="" />
+		</div>
 
-	{#each sectionItems as section}
-		<ReviewSection {...section} />
-	{/each}
-</div>
+		{#each tableData as data}
+			<ReviewSection {...data} />
+		{/each}
+	</div>
+{/if}
 
 <!-- APPROVAL FORM -->
 <form method="POST" class="mt-4 w-1/4" action={`${$page.url.pathname}`}>

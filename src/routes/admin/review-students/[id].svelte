@@ -9,9 +9,9 @@
 	export let user: User;
 	export let userDetails: UserDetails;
 
-	const sectionItems = [
+	const tableData = [
 		{
-			sectionTitle: {
+			title: {
 				title: 'User Details',
 				subtitle: 'Primary account details '
 			},
@@ -35,7 +35,7 @@
 			]
 		},
 		{
-			sectionTitle: {
+			title: {
 				title: 'Personal Information',
 				subtitle: 'Personal details and application.'
 			},
@@ -75,7 +75,7 @@
 			]
 		},
 		{
-			sectionTitle: {
+			title: {
 				title: 'Contact Information',
 				subtitle: 'Contact details'
 			},
@@ -115,7 +115,7 @@
 			]
 		},
 		{
-			sectionTitle: {
+			title: {
 				title: 'Parent Basic Information',
 				subtitle: 'Parents basic information'
 			},
@@ -155,7 +155,7 @@
 			]
 		},
 		{
-			sectionTitle: {
+			title: {
 				title: 'Application Details',
 				subtitle: ''
 			},
@@ -175,4 +175,4 @@
 	const profileImageUrl = user.profileImageUrl;
 </script>
 
-<ReviewDetailsTable {sectionItems} {profileImageUrl} />
+<ReviewDetailsTable {tableData} {profileImageUrl} />

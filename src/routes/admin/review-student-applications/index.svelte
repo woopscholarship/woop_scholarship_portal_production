@@ -1,7 +1,5 @@
 <script lang="ts">
-
-
-  import DataTable, { Head, Body, Row, Cell, Pagination } from '@smui/data-table';
+	import DataTable, { Head, Body, Row, Cell, Pagination } from '@smui/data-table';
 	import Select, { Option } from '@smui/select';
 	import IconButton from '@smui/icon-button';
 	import { Label } from '@smui/common';
@@ -9,17 +7,13 @@
 	import { page } from '$app/stores';
 	import type { StudentApplication, User } from '@prisma/client';
 
-
-
-
 	interface StudentApplications extends StudentApplication {
 		studentUser: User;
 	}
 
+	export let studentApplications: StudentApplications[];
 
-  export let studentApplications: StudentApplications[];
-
-console.log(studentApplications)
+	console.log(studentApplications);
 
 	let rowsPerPage = 10;
 	let currentPage = 0;
@@ -71,14 +65,16 @@ console.log(studentApplications)
 			{#each slice as item (item.id)}
 				<Row>
 					<Cell>{item.id}</Cell>
-					<Cell class='flex items-center gap-4'>
-          <div><img src={item.studentUser.profileImageUrl} alt={item.studentUser.displayName}></div>  
-          <div class="flex flex-col">
-            <span>{item.studentUser.displayName}</span>
-            <span>{item.studentUser.email}</span>
-          </div>
-        </Cell>
-        <Cell>{item.scholarshipProgramId ? 'Scholarship' : 'Grant'}</Cell>
+					<Cell class="flex items-center gap-4">
+						<div>
+							<img src={item.studentUser.profileImageUrl} alt={item.studentUser.displayName} />
+						</div>
+						<div class="flex flex-col">
+							<span>{item.studentUser.displayName}</span>
+							<span>{item.studentUser.email}</span>
+						</div>
+					</Cell>
+					<Cell>{item.scholarshipProgramId ? 'Scholarship' : 'Grant'}</Cell>
 					<Cell>{item.appliedOn}</Cell>
 					<Cell><StatusBadge status={item.status} /></Cell>
 					<Cell

@@ -1,7 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import prisma from '$root/lib/prisma';
-import type { ScholarshipProgram } from '@prisma/client';
-
 
 type ProgramType = 'GRANT' | 'SCHOLARSHIP';
 type DegreeLevel = 'UNDERGRADUATE' | 'GRADUATE' | 'POST_GRADUATE';

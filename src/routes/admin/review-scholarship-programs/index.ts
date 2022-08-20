@@ -1,8 +1,8 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { GetScholarshipPrograms } from '$root/utils/prisma';
+import { scholarship } from '$root/utils/prisma';
 
 export const GET: RequestHandler = async () => {
-	const scholarshipPrograms = await GetScholarshipPrograms()
+	const scholarshipPrograms = await scholarship.getAllPrograms();
 	return {
 		headers: { 'Content-Type': 'application/json' },
 		status: 200,
@@ -14,7 +14,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	const form = await request.formData();
 	const status = <'APPROVED' | 'REJECTED' | 'PENDING'>String(form.get('status'));
 
-	const scholarshipPrograms = await GetScholarshipPrograms(status);
+	const scholarshipPrograms = await scholarship.filterScholarships(status);
 
 
 	return {

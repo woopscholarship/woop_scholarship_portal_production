@@ -1,23 +1,91 @@
 import prisma from '$root/lib/prisma';
 import type { User, PersonalInformation, OrganizationInfo } from '@prisma/client';
+import type { UserDetails } from '$root/types/data';
+import type { ReviewStatus, UserType } from '$root/types/enum';
 
-export type UserDetails = {
-	user: User;
-	userDetails: PersonalInformation;
-	organization?: OrganizationInfo;
-};
+export const scholarship = {
+	/**
+	 * Gets all the scholarship programs
+	 * @returns The scholarship programs
+	 */
+	async getAllPrograms() {
+		const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
+			include: {
+				sponsorUser: true
+			}
+		});
 
-// SCHOLARSHIP METHODS
+		return scholarshipPrograms;
+	},
 
-export const GetScholarshipPrograms = async (
-	reviewStatus: 'APPROVED' | 'REJECTED' | 'PENDING' = 'PENDING',
-	email?: string
-) => {
-	if (email) {
+	/**
+	 * Gets the scholarship program with the given id
+	 * @param id  The id of the scholarship program
+	 * @returns The scholarship program
+	 */
+	async getProgramDetails(id: string) {
+		const scholarshipPrograms = await prisma.scholarshipProgram.findFirst({
+			where: {
+				id: {
+					equals: +id
+				}
+			},
+			include: {
+				sponsorUser: true
+			}
+		});
+		return scholarshipPrograms;
+	},
+
+	/**
+	 * Gets the scholarship program with the given sponsor id
+	 * @param sponsorId The id of the sponsor
+	 * @returns The scholarship program
+	 */
+	async getProgramBySponsor(sponsorId: string) {
+		const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
+			where: {
+				sponsorUserId: {
+					equals: sponsorId
+				}
+			},
+			include: {
+				applicants: true
+			}
+		});
+
+		return scholarshipPrograms;
+	},
+
+	/**
+	 * Updates the scholarship program with the given id with the given status
+	 *
+	 * @param id  The id of the scholarship program
+	 * @param status  The status of the scholarship program
+	 *
+	 * @returns The scholarship program
+	 */
+	async updateApprovalStatus(id: number, status: ReviewStatus): Promise<void> {
+		await prisma.scholarshipProgram.update({
+			where: {
+				id: id
+			},
+			data: {
+				reviewStatus: status
+			}
+		});
+	},
+
+	/**
+	 * Filters the scholarship programs by the given status
+	 * @param status The status of the scholarship program
+	 * @returns The scholarship programs
+	 */
+	async filterScholarships(status: ReviewStatus) {
 		const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
 			where: {
 				reviewStatus: {
-					equals: reviewStatus
+					equals: status
 				}
 			},
 			include: {
@@ -27,169 +95,261 @@ export const GetScholarshipPrograms = async (
 
 		return scholarshipPrograms;
 	}
-
-	const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
-		where: {
-			reviewStatus: {
-				equals: reviewStatus
-			}
-		},
-		include: {
-			sponsorUser: true
-		}
-	});
-
-	return scholarshipPrograms;
 };
 
-export const GetScholarshipProgramDetails = async (id: string) => {
-	const scholarshipPrograms = await prisma.scholarshipProgram.findFirst({
-		where: {
-			id: {
-				equals: +id
-			}
-		},
-		include: {
-			sponsorUser: true
-		}
-	});
-
-	return scholarshipPrograms;
-};
-
-export const GetGrantPrograms = async () => {
-	const grantPrograms = await prisma.grantProgram.findMany({
-		include: {
-			sponsorUser: true
-		}
-	});
-
-	return grantPrograms;
-};
-
-export const GetGrantProgramDetails = async (id: string) => {
-	const grantProgram = await prisma.grantProgram.findFirst({
-		where: {
-			id: {
-				equals: +id
-			}
-		},
-		include: {
-			sponsorUser: true
-		}
-	});
-
-	return grantProgram;
-};
-
-export const UpdateScholarshipProgramApprovalStatus = async (
-	id: number,
-	status: 'APPROVED' | 'REJECTED'
-) => {
-	const scholarshipProgram = await prisma.scholarshipProgram.update({
-		where: {
-			id: id
-		},
-		data: {
-			reviewStatus: status
-		}
-	});
-
-	return scholarshipProgram;
-};
-
-// USER METHODS
-
-export const GetUsers = async (userType: 'ADMIN' | 'SPONSOR' | 'STUDENT') => {
-	const users = await prisma.user.findMany({
-		where: {
-			userType: userType,
-			approvalStatus: 'PENDING'
-		}
-	});
-	return users;
-};
-
-export const GetUserDetails = async (userId: string): Promise<UserDetails> => {
-	const user = <User>await prisma.user.findFirst({
-		where: { id: userId }
-	});
-
-	console.log('user', user);
-
-	const userDetails = <PersonalInformation>await prisma.personalInformation.findFirst({
-		where: { userId: userId },
-		include: { relationship: true }
-	});
-
-	// Get Additional Sponsor Details if User is a Sponsor
-	if (user.userType === 'SPONSOR') {
-		// Get Organization Details
-		const organization = <OrganizationInfo>await prisma.organizationInfo.findFirst({
-			where: {
-				sponsorUserId: userId
+export const grant = {
+	/**
+	 * Gets all grant programs
+	 *
+	 * @param reviewStatus The status of the grant program
+	 * @param email The email of the sponsor
+	 *
+	 * @returns Gets All Grant Programs
+	 */
+	async getAllPrograms() {
+		const grantPrograms = await prisma.grantProgram.findMany({
+			include: {
+				sponsorUser: true
 			}
 		});
 
+		return grantPrograms;
+	},
+
+	/**
+	 * Gets the details of a grant program
+	 * @param id - The id of the grant program
+	 * @returns The grant program details
+	 */
+	async getProgramDetail(id: string) {
+		const grantProgram = await prisma.grantProgram.findFirst({
+			where: {
+				id: {
+					equals: +id
+				}
+			},
+			include: {
+				sponsorUser: true
+			}
+		});
+		return grantProgram;
+	},
+
+	/**
+	 * Gets the grant program with the given sponsor id
+	 * @param sponsorId The id of the sponsor
+	 * @returns The Grant program
+	 */
+	async getProgramBySponsor(sponsorId: string) {
+		const grantPrograms = await prisma.grantProgram.findMany({
+			where: {
+				sponsorUserId: {
+					equals: sponsorId
+				}
+			},
+			include: {
+				applicants: true
+			}
+		});
+
+		return grantPrograms;
+	},
+
+	/**
+	 * Updates the approval status of a grant program
+	 * @param id - The id of the grant program
+	 * @param status - The new approval status of the grant program
+	 */
+	async updateApprovalStatus(id: number, status: ReviewStatus): Promise<void> {
+		await prisma.grantProgram.update({
+			where: {
+				id: id
+			},
+			data: {
+				reviewStatus: status
+			}
+		});
+	}
+};
+
+export const user = {
+	/**
+	 * Gets All Users from the database
+	 * @param userType - The type of user to get
+	 * @returns All users of the specified type
+	 */
+	async getAllUsers(userType: UserType): Promise<User[]> {
+		const users = await prisma.user.findMany({
+			where: {
+				userType: userType,
+				approvalStatus: 'PENDING'
+			}
+		});
+		return users;
+	},
+
+	/**
+	 * Gets the user details for the user with the given id.
+	 * @param id - The id of the user to get the details for.
+	 * @returns The user details for the user with the given id.
+	 */
+	async getUserDetails(id: string): Promise<UserDetails> {
+		const user = <User>await prisma.user.findFirst({
+			where: { id: id }
+		});
+
+		console.log('user', user);
+
+		const userDetails = <PersonalInformation>await prisma.personalInformation.findFirst({
+			where: { userId: id },
+			include: { relationship: true }
+		});
+
+		// Get Additional Sponsor Details if User is a Sponsor
+		if (user.userType === 'SPONSOR') {
+			// Get Organization Details
+			const organization = <OrganizationInfo>await prisma.organizationInfo.findFirst({
+				where: {
+					sponsorUserId: id
+				}
+			});
+
+			return {
+				user,
+				userDetails,
+				organization
+			};
+		}
+
+		// DEFAULT RETURN
 		return {
 			user,
-			userDetails,
-			organization
+			userDetails
 		};
-	}
+	},
 
-	// DEFAULT RETURN
-	return {
-		user,
-		userDetails
-	};
-};
+	/**
+	 * Updates the approval status of the user
+	 * @param id - User id to update
+	 * @param status - Approval status to update to
+	 */
+	async updateUserStatus(id: string, status: ReviewStatus): Promise<void> {
+		await prisma.user.update({
+			where: {
+				id: id
+			},
+			data: {
+				approvalStatus: status
+			}
+		});
+	},
 
-export const UpdateUserStatus = async (userId: string, status: 'APPROVED' | 'REJECTED') => {
-	const user = await prisma.user.update({
-		where: {
-			id: userId
-		},
-		data: {
-			approvalStatus: status
-		}
-	});
-
-	return user;
-};
-
-export const filterUserTable = async (
-	userType: 'ADMIN' | 'SPONSOR' | 'STUDENT',
-	status: 'PENDING' | 'REJECTED' | 'APPROVED',
-	date: string,
-	email: string
-) => {
-	// When Email is inputted search by ignoring approval status
-	if (email !== '') {
-		const users = await prisma.user.findMany({
+	/**
+	 * Filters the users based on the search query
+	 *
+	 * @param userType - User Type to filter by
+	 * @param status - Status to filter by
+	 * @param email - email query to filter by
+	 *
+	 * @returns Returns an array of filtered users that match the search query
+	 */
+	async filterUsers(userType: UserType, status: ReviewStatus, email?: string): Promise<User[]> {
+		let query: any = {
 			where: {
 				userType: {
 					equals: userType
 				},
-				email: {
-					contains: email
+
+				// Ignore Apprioval Status When Email is Specified
+				approvalStatus: {
+					equals: status
 				}
 			}
-		});
+		};
+
+		if (email) {
+			// Ignore Approval Status When Email is Specified
+			query = {
+				where: {
+					userType: {
+						equals: userType
+					},
+					email: {
+						contains: email
+					}
+				}
+			};
+		}
+
+		const users = await prisma.user.findMany(query);
+
 		return users;
 	}
+};
 
-	// default search
-	const users = await prisma.user.findMany({
-		where: {
-			userType: {
-				equals: userType
-			},
-			approvalStatus: {
-				equals: status
+export const studentApplication = {
+	/**
+	 * Gets all student applications
+	 * @returns All student applications
+	 */
+	async getAllApplications() {
+		const studentApplications = await prisma.studentApplication.findMany({
+			include: {
+				studentUser: true
 			}
-		}
-	});
+		});
 
-	return users;
+		return studentApplications;
+	},
+
+	/**
+	 * Gets the details of a student application
+	 * @param id - The id of the student application
+	 * @returns The student application details
+	 */
+	async getApplicationDetails(id: string) {
+		const studentApplication = await prisma.studentApplication.findFirst({
+			where: {
+				id: {
+					equals: +id
+				}
+			},
+			include: {
+				studentUser: true
+			}
+		});
+
+		return studentApplication;
+	},
+
+	async updateApplicationStatus(id: number, status: ReviewStatus): Promise<void> {
+		await prisma.studentApplication.update({
+			where: {
+				id: id
+			},
+			data: {
+				status: status
+			}
+		});
+	},
+
+	/**
+	 * Gets all student applications
+	 * @param status - Status to filter by
+	 * @returns All student applications
+	 */
+	async filterApplications(status: ReviewStatus) {
+		const studentApplications = await prisma.studentApplication.findMany({
+			where: {
+				status: {
+					equals: status
+				}
+			},
+			include: {
+				studentUser: true
+			}
+		});
+
+		return studentApplications;
+	}
 };

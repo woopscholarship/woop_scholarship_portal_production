@@ -1,9 +1,10 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { GetGrantPrograms } from '$root/utils/prisma';
+import { grant } from '$root/utils/prisma';
 import prisma from '$root/lib/prisma';
 
 export const GET: RequestHandler = async () => {
-	const grantPrograms = await GetGrantPrograms()
+	const grantPrograms = await grant.getAllPrograms()
+
 	return {
 		headers: { 'Content-Type': 'application/json' },
 		status: 200,

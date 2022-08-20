@@ -1,17 +1,14 @@
 <script lang="ts">
+	import type { ReviewTableTitle, ReviewTableItem } from '$root/types/component';
 	import ReviewSectionTitle from './reviewSectionTitle.svelte';
 	import ReviewSectionItem from './reviewSectionItem.svelte';
-	type ReviewItem = { label: string; value: any; type?: 'text' | 'image' | null };
 
-	export let sectionTitle: {
-		title: string;
-		subtitle: string;
-	};
-	export let items: ReviewItem[];
+	export let title: ReviewTableTitle;
+	export let items: ReviewTableItem[];
 
 </script>
 
-<ReviewSectionTitle {...sectionTitle} />
+<ReviewSectionTitle {...title} />
 
 <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
 	<dl class="sm:divide-y sm:divide-gray-200">

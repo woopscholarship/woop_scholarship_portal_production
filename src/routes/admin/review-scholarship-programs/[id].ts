@@ -1,11 +1,10 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import {
-	GetScholarshipProgramDetails,
-	UpdateScholarshipProgramApprovalStatus
+	scholarship
 } from '$root/utils/prisma';
 
 export const GET: RequestHandler = async ({ params }) => {
-	const scholarshipProgram = await GetScholarshipProgramDetails(params.id);
+	const scholarshipProgram = await scholarship.getProgramDetails(params.id);
 	return {
 		headers: { 'Content-Type': 'application/json' },
 		status: 200,
@@ -18,6 +17,6 @@ export const GET: RequestHandler = async ({ params }) => {
 export const POST: RequestHandler = async ({ params, request }) => {
 	const form = await request.formData();
 	const status = <'APPROVED' | 'REJECTED'>String(form.get('status'));
-	await UpdateScholarshipProgramApprovalStatus(Number(params.id), status);
+	await scholarship.updateApprovalStatus(Number(params.id), status);
 	return {};
 };

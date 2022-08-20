@@ -1,5 +1,5 @@
 <script>
-	import { studentRoutes } from '$lib/init/initSidebarNavLinks';
+	import { studentRoutes } from '$root/lib/initSidebarNavLinks';
 	import { fade } from 'svelte/transition';
 	import NavigationItem from '$root/components/sidebar/navigationItem.svelte';
 </script>

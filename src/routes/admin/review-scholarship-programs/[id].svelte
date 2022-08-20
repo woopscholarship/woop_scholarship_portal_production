@@ -9,9 +9,9 @@
 	export let scholarshipProgram: ScholarshipPrograms;
 	console.log(scholarshipProgram);
 
-	const sectionItems = [
+	const tableData = [
 		{
-			sectionTitle: {
+			title: {
 				title: 'Sponsorship Details',
 				subtitle: 'Primary account details '
 			},
@@ -71,7 +71,7 @@
 			]
 		},
 		{
-			sectionTitle: {
+			title: {
 				title: 'Sponsor Details',
 				subtitle: 'Scholarship Program Details'
 			},
@@ -95,4 +95,4 @@
 	const profileImageUrl = scholarshipProgram.sponsorUser.profileImageUrl;
 </script>
 
-<ReviewDetailsTable {sectionItems} {profileImageUrl} />
+<ReviewDetailsTable {tableData} {profileImageUrl} />
