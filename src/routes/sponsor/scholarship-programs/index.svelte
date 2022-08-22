@@ -6,12 +6,19 @@
 	import StatusBadge from '$root/components/statusBadge.svelte';
 	import { page } from '$app/stores';
 
-	import type { ScholarshipProgram, GrantProgram, StudentApplication } from '@prisma/client';
+	import type { ScholarshipProgram, StudentApplication } from '@prisma/client';
 
-	export let scholarshipPrograms: ScholarshipProgram[];
-	export let grantPrograms: GrantProgram[];
 
-	let programs = [...scholarshipPrograms, ...grantPrograms];
+	interface _ScholarshipProgram extends ScholarshipProgram {
+		applicants: StudentApplication[];
+	}
+	
+
+	
+	
+	export let scholarshipPrograms: _ScholarshipProgram[];
+
+	let programs = [...scholarshipPrograms];
 
 	console.log(scholarshipPrograms[0]);
 
@@ -26,15 +33,23 @@
 	$: if (currentPage > lastPage) {
 		currentPage = lastPage;
 	}
+
+
+
+	function truncate(str: string, n: number){
+  return (str.length > n) ? str.slice(0, n-1) + '...' : str;
+};
+
 </script>
 
 <DataTable $aria-label="Todo list" style="width: 100%;">
 	<Head>
 		<Row>
 			<Cell>Name</Cell>
-			<Cell>Date Posted</Cell>
-			<Cell>Degree Level</Cell>
-			<Cell>Max Applicants</Cell>
+			<Cell>Description</Cell>
+			<Cell>Applicants</Cell>
+			<Cell>Scholarship For</Cell>
+			<Cell>Status</Cell>
 			<Cell />
 		</Row>
 	</Head>
@@ -44,13 +59,14 @@
 		{:else}
 			{#each slice as item (item.id)}
 				<Row>
-					<Cell>{item.id}</Cell>
-					<Cell>{item.postedOn}</Cell>
+					<Cell>{item.name}</Cell>
+					<Cell>{@html truncate(item.description, 40)}</Cell>
+					<Cell>{item.applicants.length} / {item.maxApplicants}</Cell>
 					<Cell>{item.degreeLevel}</Cell>
-					<Cell>{item.maxApplicants}</Cell>
+					<Cell><StatusBadge status={item.status} /></Cell>
 					<Cell
 						><a class="p-4 py-2 bg-primary text-white" href={`${$page.url.pathname}/${item.id}`}
-							>Review</a
+							>Edit</a
 						></Cell
 					>
 				</Row>

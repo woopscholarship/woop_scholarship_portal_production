@@ -2,6 +2,10 @@ import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 const prisma = new PrismaClient();
 
+import {associate, bachelor, masters, doctors} from './degreeProgram';
+
+
+
 export const USERS: any[] = [];
 export const SCHOLARSHIP_PROGRAM: any[] = [];
 export const GRANT_PROGRAM: any[] = [];
@@ -47,13 +51,28 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 						fatherPhone: faker.phone.number()
 					}
 				},
-				degreeLevel: faker.helpers.arrayElement(['UNDERGRADUATE', 'GRADUATE', 'POST_GRADUATE']),
-				degreeProgram: faker.name.jobTitle(),
+				degreeLevel: faker.helpers.arrayElement(['ASSOCIATE', 'BACHELORS', 'MASTERS', 'DOCTORAL']),
 				reasonForApplication: faker.lorem.paragraph(),
 				facebookUrl: faker.internet.url(),
 				validIdUrl: faker.image.abstract()
 			}
 		};
+
+		if(user.userDetails.create.degreeLevel === 'ASSOCIATE') {
+			user.userDetails.create.degreeProgram = faker.helpers.arrayElement(associate)
+		}
+
+		if(user.userDetails.create.degreeLevel === 'BACHELORS') {
+			user.userDetails.create.degreeProgram = faker.helpers.arrayElement(bachelor)
+		}
+		if(user.userDetails.create.degreeLevel === 'MASTERS') {
+			user.userDetails.create.degreeProgram = faker.helpers.arrayElement(masters)
+		}
+
+		if(user.userDetails.create.degreeLevel === 'DOCTORAL') {
+			user.userDetails.create.degreeProgram = faker.helpers.arrayElement(doctors)
+		}
+
 	}
 
 	if (user.userType === 'SPONSOR') {
@@ -102,12 +121,12 @@ function createRandomUsers(count: number, userType: 'STUDENT' | 'SPONSOR' | unde
 	return users;
 }
 
-function createScholarshipProgram() {
+function createScholarshipProgram(programType: 'SCHOLARSHIP' | 'GRANT') {
 	const scholarshipProgram = {
 		name: faker.company.companyName() + ' Scholarship Program',
 		description: faker.lorem.paragraph(),
 		postedOn: faker.date.past(),
-		degreeLevel: faker.helpers.arrayElement(['UNDERGRADUATE', 'GRADUATE', 'POST_GRADUATE']),
+		degreeLevel: faker.helpers.arrayElement(['ASSOCIATE', 'BACHELORS', 'MASTERS', 'DOCTORAL']),
 		maxApplicants: +faker.random.numeric(3),
 		scholarshipType: faker.helpers.arrayElement(['ACADEMIC', 'SPORTS', 'ESSAY', 'OTHER']),
 		programType: faker.helpers.arrayElement(['GRANT', 'SCHOLARSHIP']),
@@ -126,37 +145,17 @@ function createScholarshipProgram() {
 	return scholarshipProgram;
 }
 
-function createGrantProgram() {
-	const grantProgram = {
-		name: faker.company.companyName() + ' Grant Program',
-		description: faker.lorem.paragraph(),
-		postedOn: faker.date.past(),
-		amountOffer: faker.finance.amount(1000, 10000, 0, 'PHP'),
-		degreeLevel: faker.helpers.arrayElement(['UNDERGRADUATE', 'GRADUATE', 'POST_GRADUATE']),
-		maxApplicants: +faker.random.numeric(3),
-		status: faker.helpers.arrayElement(['OPEN', 'CLOSED']),
-		reviewStatus: faker.helpers.arrayElement(['PENDING', 'APPROVED', 'REJECTED']),
-		programType: faker.helpers.arrayElement(['GRANT', 'SCHOLARSHIP']),
-
-		address: faker.address.streetAddress(),
-		city: faker.address.cityName(),
-		state: faker.address.state(),
-		country: faker.address.country(),
-		phoneNumber: faker.phone.number(),
-		email: faker.internet.email(),
-		website: faker.internet.url()
-	};
-	return grantProgram;
-}
-
 function createStudentApplications(count: number) {
 	const applications: any[] = [];
 
+
 	Array.from({ length: count }).forEach(() => {
+	const studentUser = createRandomUser('STUDENT');
+
 		applications.push({
 			reason: faker.lorem.paragraph(),
 			studentUser: {
-				create: createRandomUser('STUDENT')
+				create: studentUser
 			}
 		});
 	});
@@ -166,8 +165,8 @@ function createStudentApplications(count: number) {
 
 Array.from({ length: 20 }).forEach(() => {
 	USERS.push(createRandomUser());
-	SCHOLARSHIP_PROGRAM.push(createScholarshipProgram());
-	GRANT_PROGRAM.push(createGrantProgram());
+	SCHOLARSHIP_PROGRAM.push(createScholarshipProgram('SCHOLARSHIP'));
+	GRANT_PROGRAM.push(createScholarshipProgram('GRANT'));
 });
 
 async function main() {
@@ -192,7 +191,7 @@ async function main() {
 	});
 
 	GRANT_PROGRAM.forEach(async (grantProgramData) => {
-		const data = await prisma.grantProgram.create({
+		const data = await prisma.scholarshipProgram.create({
 			data: {
 				...grantProgramData,
 				sponsorUser: {

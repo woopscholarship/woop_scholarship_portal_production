@@ -1,49 +1,52 @@
 <script lang="ts">
+	import ProgramOption from '$root/components/sponsor/programOption.svelte';
 	import { page } from '$app/stores';
 	import DataTable, { Head, Body, Row, Cell, Pagination } from '@smui/data-table';
 	import Select, { Option } from '@smui/select';
 	import IconButton from '@smui/icon-button';
 	import { Label } from '@smui/common';
+	import Loader from '$root/components/common/loader.svelte';
 
-	import type { ScholarshipProgram, GrantProgram, StudentApplication, User } from '@prisma/client';
+	import type {
+		ScholarshipProgram,
+		StudentApplication,
+		User,
+		PersonalInformation
+	} from '@prisma/client';
 
 	import Topbar from '$root/components/dashboard/topbar.svelte';
 	import Banner from '$root/components/dashboard/banner.svelte';
 
-
-	interface ScholarshipPrograms  extends ScholarshipProgram {
-		applicants: StudentApplication[];
+	interface _ScholarshipProgram extends ScholarshipProgram {
+		applicants: any;
 	}
 
-	
-	interface GrantPrograms extends GrantProgram {
-		applicants: StudentApplication[];
+	interface _StudentApplication extends StudentApplication {
+		studentUser: _User;
 	}
 
+	interface _User extends User {
+		userDetails: PersonalInformation;
+	}
 
-	export let scholarshipPrograms: ScholarshipPrograms[];
-	export let grantPrograms: GrantPrograms[];
-	export let sponsorUser: User;
+	export let scholarshipPrograms: _ScholarshipProgram[];
+	export let currentIndex: number;
 
-
-	let programs = [...scholarshipPrograms, ...grantPrograms];
-	let index = 0;
-
-
+	let programs = [...scholarshipPrograms];
+	let applicants: _StudentApplication[] = programs[currentIndex].applicants;
 
 	let rowsPerPage = 10;
 	let currentPage = 0;
 
 	$: start = currentPage * rowsPerPage;
-	$: end = Math.min(start + rowsPerPage, grantPrograms.length);
-	$: slice = grantPrograms.slice(start, end);
-	$: lastPage = Math.max(Math.ceil(grantPrograms.length / rowsPerPage) - 1, 0);
+	$: end = Math.min(start + rowsPerPage, applicants.length);
+	$: slice = applicants.slice(start, end);
+	$: lastPage = Math.max(Math.ceil(applicants.length / rowsPerPage) - 1, 0);
 
 	$: if (currentPage > lastPage) {
 		currentPage = lastPage;
 	}
 </script>
-
 
 <Topbar
 	title={'Student Applications'}
@@ -51,102 +54,113 @@
 	userImageAddress={'https://i.ibb.co/fFj4t1s/IMG-6893.jpg'}
 />
 
-<div class="flex flex-col mt-6">
-	<Banner text={`Your Program has ${scholarshipPrograms[index].applicants.length} Applications`} />
+<Banner text={`Your Program has ${programs[currentIndex].applicants.length} Applications`} />
 
-	<h2 class="font-bold text-lg mb-4">Programs</h2>
-	<form class="mb-4 flex gap-2" method="POST" action="sponsor/student-applications">
-		<select name="program" id="program">
-			{#each scholarshipPrograms as program}
-				<option value={program.id}>{program.name}</option>
-			{/each}
-			{#each grantPrograms as program}
-				<option value={program.id}>{program.name}</option>
-			{/each}
-		</select>
-		<input type="submit" value="Filter" class="bg-primary text-white px-6 py " />
-	</form>
+{#if !applicants}
+	<Loader />
+{:else}
+	<div class="flex mt-6 gap-4 ">
+		<form
+			class="flex flex-col gap-4 w-1/4 overflow-hidden p-4 bg-white mb-4 shadow-sm"
+			method="POST"
+			action={$page.url.pathname}
+		>
+			<h2 class="font-bold text-lg mb-4">Programs</h2>
 
+			<select class="border p-1 py-2" name="program" id="program">
+				{#each scholarshipPrograms as program}
+					<ProgramOption {program} />
+				{/each}
+			</select>
 
+			<input
+				type="submit"
+				value="Filter"
+				class="bg-primary text-white px-6 py-2 rounded hover:cursor-pointer"
+			/>
+		</form>
 
-
-	<DataTable table$aria-label="Todo list" style="width: 100%;">
-	<Head>
-		<Row>
-			<Cell>ID</Cell>
-			<Cell>Sponsor</Cell>
-			<Cell>Scholarship Name</Cell>
-			<Cell>Status</Cell>
-			<Cell>Location</Cell>
-		</Row>
-	</Head>
-	<Body>
-		{#if grantPrograms.length === 0}
-			<p class="text-center p-4 bg-red-200">NO Grant Program DATA FOUND</p>
-		{:else}
-			{#each slice as item (item.id)}
+		<DataTable table$aria-label="Todo list" class="w-3/4">
+			<Head>
 				<Row>
-					<Cell>{item.id}</Cell>
-					<Cell class="p-4">
-						<div><img class="rounded" src={sponsorUser.profileImageUrl} alt="" /></div>
-						<div>{sponsorUser.displayName}</div>
-						<div class="text-xs text-gray-700">{sponsorUser.email}</div>
-					</Cell>
-
-
-					<Cell
-						><a class="p-4 py-2 bg-primary text-white" href={`${$page.url.pathname}/${item.id}`}
-							>Review</a
-						></Cell
-					>
+					<Cell>Student Name</Cell>
+					<Cell>Email</Cell>
+					<Cell>Application Date</Cell>
+					<Cell />
 				</Row>
-			{/each}
-		{/if}
-	</Body>
+			</Head>
 
-	<Pagination slot="paginate">
-		<svelte:fragment slot="rowsPerPage">
-			<Label>Rows Per Page</Label>
-			<Select variant="outlined" bind:value={rowsPerPage} noLabel>
-				<Option value={10}>10</Option>
-				<Option value={25}>25</Option>
-				<Option value={100}>100</Option>
-			</Select>
-		</svelte:fragment>
-		<svelte:fragment slot="total">
-			{start + 1}-{end} of {grantPrograms.length}
-		</svelte:fragment>
+			{#if programs[currentIndex].applicants.length === 0}
+				<p class="text-center p-4 ">No Student Applicants Found</p>
+			{:else}
+				<Body>
+					{#each slice as applicant (applicant.id)}
+						<Row>
+							<Cell>
+								<div class="flex items-center gap-4">
+									<img
+										src={applicant.studentUser.profileImageUrl}
+										alt={applicant.studentUser.displayName}
+										class="w-10 h-10 rounded-full"
+									/>
+									{applicant.studentUser.displayName}
+								</div>
+							</Cell>
+							<Cell>{applicant.studentUser.email}</Cell>
+							<Cell>{applicant.appliedOn}</Cell>
+							<Cell class="text-center"
+								><a
+									href={`${$page.url.pathname}/${applicant.id}`}
+									class="text-white font-light bg-primary px-4 py-2 rounded">View Student</a
+								></Cell
+							>
+						</Row>
+					{/each}
+				</Body>
+			{/if}
 
-		<IconButton
-			class="material-icons"
-			action="first-page"
-			title="First page"
-			on:click={() => (currentPage = 0)}
-			disabled={currentPage === 0}>first_page</IconButton
-		>
-		<IconButton
-			class="material-icons"
-			action="prev-page"
-			title="Prev page"
-			on:click={() => currentPage--}
-			disabled={currentPage === 0}>chevron_left</IconButton
-		>
-		<IconButton
-			class="material-icons"
-			action="next-page"
-			title="Next page"
-			on:click={() => currentPage++}
-			disabled={currentPage === lastPage}>chevron_right</IconButton
-		>
-		<IconButton
-			class="material-icons"
-			action="last-page"
-			title="Last page"
-			on:click={() => (currentPage = lastPage)}
-			disabled={currentPage === lastPage}>last_page</IconButton
-		>
-	</Pagination>
-</DataTable>
+			<Pagination slot="paginate">
+				<svelte:fragment slot="rowsPerPage">
+					<Label>Rows Per Page</Label>
+					<Select variant="outlined" bind:value={rowsPerPage} noLabel>
+						<Option value={10}>10</Option>
+						<Option value={25}>25</Option>
+						<Option value={100}>100</Option>
+					</Select>
+				</svelte:fragment>
+				<svelte:fragment slot="total">
+					{start + 1}-{end} of {programs.length}
+				</svelte:fragment>
 
-
-</div>
+				<IconButton
+					class="material-icons"
+					action="first-page"
+					title="First page"
+					on:click={() => (currentPage = 0)}
+					disabled={currentPage === 0}>first_page</IconButton
+				>
+				<IconButton
+					class="material-icons"
+					action="prev-page"
+					title="Prev page"
+					on:click={() => currentPage--}
+					disabled={currentPage === 0}>chevron_left</IconButton
+				>
+				<IconButton
+					class="material-icons"
+					action="next-page"
+					title="Next page"
+					on:click={() => currentPage++}
+					disabled={currentPage === lastPage}>chevron_right</IconButton
+				>
+				<IconButton
+					class="material-icons"
+					action="last-page"
+					title="Last page"
+					on:click={() => (currentPage = lastPage)}
+					disabled={currentPage === lastPage}>last_page</IconButton
+				>
+			</Pagination>
+		</DataTable>
+	</div>
+{/if}

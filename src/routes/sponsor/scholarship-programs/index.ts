@@ -7,9 +7,6 @@ export const GET: RequestHandler = async () => {
 			userType: {
 				equals: 'SPONSOR'
 			},
-			email: {
-				equals: 'Mackenzie_Kuhic1@gmail.com'
-			}
 		}
 	});
 
@@ -18,14 +15,9 @@ export const GET: RequestHandler = async () => {
 			sponsorUserId: {
 				equals: sponsorUser!.id
 			}
-		}
-	});
-
-	const grantPrograms: any = await prisma.grantProgram.findMany({
-		where: {
-			sponsorUserId: {
-				equals: sponsorUser!.id
-			}
+		},
+		include: {
+			applicants: true
 		}
 	});
 
@@ -33,6 +25,6 @@ export const GET: RequestHandler = async () => {
 	return {
 		headers: { 'Content-Type': 'application/json' },
 		status: 200,
-		body: { scholarshipPrograms, grantPrograms }
+		body: { scholarshipPrograms }
 	};
 };

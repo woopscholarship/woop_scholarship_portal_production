@@ -38,7 +38,7 @@
 	<!-- Layout: default_dashboard -->
 	<Container>
 		<Sidebar {...sidebar} />
-		<main class="min-h-screen w-[80%] border p-12 bg-[#F3F5F8]">
+		<main class="min-h-screen w-[80%] border p-12 bg-[#F3F5F8] relative">
 			<slot />
 		</main>
 	</Container>

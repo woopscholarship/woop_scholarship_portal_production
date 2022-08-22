@@ -22,7 +22,6 @@ model User {
 
   // SPONSOR FIELDS
   scholarshipProgram ScholarshipProgram[]
-  grantProgram       GrantProgram[]
   organization       OrganizationInfo?
 
   // STUDENT FIELDS
@@ -31,7 +30,7 @@ model User {
 }
 
 model PersonalInformation {
-  id                   Int               @id @default(autoincrement())
+  id                   String            @id @default(uuid())
   firstName            String
   middleName           String?
   lastName             String
@@ -59,7 +58,7 @@ model PersonalInformation {
 }
 
 model RelationshipInfo {
-  id               Int     @id @default(autoincrement())
+  id               String  @id @default(uuid())
   motherPhotoUrl   String?
   motherFirstName  String?
   motherLastName   String?
@@ -73,11 +72,11 @@ model RelationshipInfo {
 
   // PERSONAL INFORMATION REFERENCE
   personalInformation PersonalInformation @relation(fields: [personalInfoId], references: [id])
-  personalInfoId      Int                 @unique
+  personalInfoId      String              @unique
 }
 
 model ScholarshipProgram {
-  id              Int                  @id @default(autoincrement())
+  id              String               @id @default(uuid())
   name            String               @unique
   description     String
   postedOn        DateTime             @default(now())
@@ -103,42 +102,11 @@ model ScholarshipProgram {
 
   // ORGANIZATION REFERENCE
   organization   OrganizationInfo? @relation(fields: [organizationId], references: [id])
-  organizationId Int?
-}
-
-model GrantProgram {
-  id              Int                  @id @default(autoincrement())
-  name            String               @unique
-  description     String
-  postedOn        DateTime             @default(now())
-  amountOffer     String
-  degreeLevel     DegreeLevel
-  maxApplicants   Int
-  scholarshipType ScholarshipType?
-  programType     ProgramType
-  status          ProgramStatus
-  reviewStatus    ApprovalStatus       @default(PENDING)
-  applicants      StudentApplication[]
-
-  address     String
-  city        String
-  state       String
-  country     String
-  email       String?
-  phoneNumber String?
-  website     String?
-
-  // SPONSOR USER REFERENCE
-  sponsorUser   User?   @relation(fields: [sponsorUserId], references: [id])
-  sponsorUserId String?
-
-  // ORGANIZATION REFERENCE
-  organization   OrganizationInfo? @relation(fields: [organizationId], references: [id])
-  organizationId Int?
+  organizationId String?
 }
 
 model OrganizationInfo {
-  id                 Int                  @id @default(autoincrement())
+  id                 String               @id @default(uuid())
   name               String               @unique
   logo               String?
   description        String
@@ -151,12 +119,11 @@ model OrganizationInfo {
   website            String?
   sponsorUser        User                 @relation(fields: [sponsorUserId], references: [id])
   sponsorUserId      String               @unique
-  GrantProgram       GrantProgram[]
   ScholarshipProgram ScholarshipProgram[]
 }
 
 model StudentApplication {
-  id              Int            @id @default(autoincrement())
+  id              String         @id @default(uuid())
   status          ApprovalStatus @default(PENDING)
   appliedOn       DateTime       @default(now())
   reason          String
@@ -168,15 +135,11 @@ model StudentApplication {
 
   // SCHOLARSHIP PROGRAM REFERENCE
   scholarshipProgram   ScholarshipProgram? @relation(fields: [scholarshipProgramId], references: [id])
-  scholarshipProgramId Int?
-
-  // GRANT PROGRAM REFERENCE
-  grantProgram   GrantProgram? @relation(fields: [grantProgramId], references: [id])
-  grantProgramId Int?
+  scholarshipProgramId String?
 }
 
 model ActityLog {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid())
   date        DateTime @default(now())
   description String
   user        User     @relation(fields: [userId], references: [id])
@@ -191,9 +154,10 @@ enum ScholarshipType {
 }
 
 enum DegreeLevel {
-  UNDERGRADUATE
-  GRADUATE
-  POST_GRADUATE
+  ASSOCIATE
+  BACHELORS
+  MASTERS
+  DOCTORAL
 }
 
 enum ProgramStatus {

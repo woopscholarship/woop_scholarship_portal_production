@@ -27,7 +27,7 @@ export const scholarship = {
 		const scholarshipPrograms = await prisma.scholarshipProgram.findFirst({
 			where: {
 				id: {
-					equals: +id
+					equals: id
 				}
 			},
 			include: {
@@ -65,10 +65,12 @@ export const scholarship = {
 	 *
 	 * @returns The scholarship program
 	 */
-	async updateApprovalStatus(id: number, status: ReviewStatus): Promise<void> {
+	async updateApprovalStatus(id: string, status: ReviewStatus): Promise<void> {
 		await prisma.scholarshipProgram.update({
 			where: {
-				id: id
+				id: {
+					equals: id
+				}
 			},
 			data: {
 				reviewStatus: status
@@ -94,81 +96,6 @@ export const scholarship = {
 		});
 
 		return scholarshipPrograms;
-	}
-};
-
-export const grant = {
-	/**
-	 * Gets all grant programs
-	 *
-	 * @param reviewStatus The status of the grant program
-	 * @param email The email of the sponsor
-	 *
-	 * @returns Gets All Grant Programs
-	 */
-	async getAllPrograms() {
-		const grantPrograms = await prisma.grantProgram.findMany({
-			include: {
-				sponsorUser: true
-			}
-		});
-
-		return grantPrograms;
-	},
-
-	/**
-	 * Gets the details of a grant program
-	 * @param id - The id of the grant program
-	 * @returns The grant program details
-	 */
-	async getProgramDetail(id: string) {
-		const grantProgram = await prisma.grantProgram.findFirst({
-			where: {
-				id: {
-					equals: +id
-				}
-			},
-			include: {
-				sponsorUser: true
-			}
-		});
-		return grantProgram;
-	},
-
-	/**
-	 * Gets the grant program with the given sponsor id
-	 * @param sponsorId The id of the sponsor
-	 * @returns The Grant program
-	 */
-	async getProgramBySponsor(sponsorId: string) {
-		const grantPrograms = await prisma.grantProgram.findMany({
-			where: {
-				sponsorUserId: {
-					equals: sponsorId
-				}
-			},
-			include: {
-				applicants: true
-			}
-		});
-
-		return grantPrograms;
-	},
-
-	/**
-	 * Updates the approval status of a grant program
-	 * @param id - The id of the grant program
-	 * @param status - The new approval status of the grant program
-	 */
-	async updateApprovalStatus(id: number, status: ReviewStatus): Promise<void> {
-		await prisma.grantProgram.update({
-			where: {
-				id: id
-			},
-			data: {
-				reviewStatus: status
-			}
-		});
 	}
 };
 
@@ -311,7 +238,7 @@ export const studentApplication = {
 		const studentApplication = await prisma.studentApplication.findFirst({
 			where: {
 				id: {
-					equals: +id
+					equals: id
 				}
 			},
 			include: {
@@ -322,7 +249,7 @@ export const studentApplication = {
 		return studentApplication;
 	},
 
-	async updateApplicationStatus(id: number, status: ReviewStatus): Promise<void> {
+	async updateApplicationStatus(id: string, status: ReviewStatus): Promise<void> {
 		await prisma.studentApplication.update({
 			where: {
 				id: id
