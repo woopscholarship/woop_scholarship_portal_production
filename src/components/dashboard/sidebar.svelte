@@ -11,7 +11,7 @@
 	export let profileImageURL: string;
 	export let routes: Route[];
 
-	console.log(routes)
+	console.log(routes);
 </script>
 
 <!-- https://i.ibb.co/fFj4t1s/IMG-6893.jpg -->
@@ -19,7 +19,12 @@
 <div class="flex flex-col justify-between flex-grow w-[20%] pt-10 pb-4 bg-white">
 	<div>
 		<div class="flex justify-center flex-shrink-0 px-4 space-y-5">
-			<Logo />
+			<img
+				src="https://woopscholarship.com/wp-content/uploads/2022/06/logotype-wcolor-1.jpg"
+				alt="woop Scholarship"
+				class="w-32 h-auto"
+				loading="lazy"
+			/>
 		</div>
 
 		<div class="pt-11 mb-10 flex items-center flex-col">
