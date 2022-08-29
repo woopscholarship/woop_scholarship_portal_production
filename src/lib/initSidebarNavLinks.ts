@@ -12,10 +12,6 @@ export const adminRoutes = [
     href: '/admin/review-scholarship-programs'
   },
   {
-    text: 'Review Grant Programs',
-    href: '/admin/review-grant-programs'
-  },
-  {
     text: 'Review Student Applications',
     href: '/admin/review-student-applications'
   }

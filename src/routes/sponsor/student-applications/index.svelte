@@ -48,11 +48,6 @@
 	}
 </script>
 
-<Topbar
-	title={'Student Applications'}
-	username="Paul Bryan Reyes"
-	userImageAddress={'https://i.ibb.co/fFj4t1s/IMG-6893.jpg'}
-/>
 
 <Banner text={`Your Program has ${programs[currentIndex].applicants.length} Applications`} />
 

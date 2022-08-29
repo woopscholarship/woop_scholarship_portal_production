@@ -1,13 +1,55 @@
-<script>
+<script lang="ts">
 	import Icon from 'svelte-awesome';
 	import google from 'svelte-awesome/icons/google';
+
+	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+	const auth = getAuth();
+
+	// User Error Message Log
+	let errorOccured = false;
+	let errorMessage = '';
+
+	const displayErrorMessage = (error: any) => {
+		console.log('Code:', error.code);
+		console.log('Message:', error.message);
+
+		if (
+			error.code === 'auth/wrong-password' ||
+			error.code === 'auth/missing-email' ||
+			error.code === 'auth/user-not-found'
+		) {
+			errorOccured = true;
+			errorMessage = 'Incorrect Password / Email. Please Try Again';
+		}
+	};
+
+	function login() {
+		const email = (<HTMLInputElement>document.querySelector('#email'))!.value;
+		const password = (<HTMLInputElement>document.querySelector('#password')).value;
+
+		signInWithEmailAndPassword(auth, email, password)
+			.then((userCredential) => {
+				const user = userCredential.user;
+				localStorage.setItem('uid', user.uid);
+				console.log('login successful');
+			})
+			.catch((error) => {
+				displayErrorMessage(error);
+			});
+	}
 </script>
 
 <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 	<div class="bg-white py-8 px-4 sm:px-10">
-		<form class="space-y-6" action="#" method="POST">
+		{#if errorOccured}
+			<p class="text-sm font-semibold italic mb-2 mx-auto mt-4">
+				{errorMessage}
+			</p>
+		{/if}
+
+		<form on:submit|preventDefault={login} class="space-y-6" action="#" method="POST">
 			<div>
-				<label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
+				<label for="email" class="block text-sm font-medium text-gray-700"> Email Address </label>
 				<div class="mt-1">
 					<input
 						id="email"
@@ -15,7 +57,7 @@
 						type="email"
 						autocomplete="email"
 						required
-						class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+						class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
 					/>
 				</div>
 			</div>
@@ -29,7 +71,7 @@
 						type="password"
 						autocomplete="current-password"
 						required
-						class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+						class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
 					/>
 				</div>
 			</div>
@@ -51,12 +93,10 @@
 			</div>
 
 			<div>
-				<a href="admin/review-students" class="text-white">
-					<button
-						type="submit"
-						class="w-full transition-all hover:scale-105 hover:bg-primary flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white  bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-						>Sign in</button
-					></a
+				<button
+					type="submit"
+					class="w-full transition-all hover:scale-105 hover:bg-primary flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white  bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring-primary"
+					>Sign in</button
 				>
 			</div>
 		</form>
@@ -100,3 +140,7 @@
 		</div>
 	</div>
 </div>
+
+<p class="not-registered-section">
+	Not registered yet? <span><a href="/select-account">Register now</a></span>
+</p>

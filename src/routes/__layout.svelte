@@ -1,5 +1,22 @@
 <script lang="ts">
 	import '../app.css';
+  import app from '$lib/initFirebase';
+  import { getAuth, onAuthStateChanged } from 'firebase/auth';
+	import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
+  import { isLoggedIn } from '../stores/authStore';
+
+	onMount(() => {
+		const auth = getAuth();
+		onAuthStateChanged(auth, (user) => {
+			if (user) {
+				isLoggedIn.update(() => true);
+			} else {
+				isLoggedIn.update(() => false);
+				goto('/login');
+			}
+		});
+	});
 </script>
 
 <header class="w-screen h-[15vh] px-64 flex items-center">
@@ -19,3 +36,22 @@
 	<p class="w-1/2 text-center">© 2022 woopscholarship.com | All Rights Reserved.</p>
 	<p class="w-1/2 text-center"><a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
 </footer>
+
+
+
+<style>
+	:global(:root) {
+		--primarycolor-dark: #0fb7a6;
+		--primarycolor-light: #00e8d7;
+		--neutral: #fafafa;
+		--custom-dark--lighter: #293e72;
+		--custom-dark: #0c1c44;
+
+		--input-background-color: #f7f7f7;
+		--input-background-color-secondary: #e6e6e6;
+		--input-placeholder-color: #ddd;
+
+		--dashboard-sidebar-color: #11264B;
+	}
+
+</style>

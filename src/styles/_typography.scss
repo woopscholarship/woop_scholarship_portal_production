@@ -1,0 +1,30 @@
+
+
+@mixin small-text-light {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+
+@mixin small-text-semibold {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+
+@mixin small-text-bold {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+@mixin normal-text-light {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+
+@mixin large-text-bold {
+  font-weight: 700;
+  font-size: 24px;
+}

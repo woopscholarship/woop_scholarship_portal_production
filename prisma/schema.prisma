@@ -30,15 +30,16 @@ model User {
 }
 
 model PersonalInformation {
-  id                   String            @id @default(uuid())
+  id                   String               @id @default(uuid())
   firstName            String
   middleName           String?
   lastName             String
   maritalStatus        MaritalStatus
   gender               Gender
   dateOfBirth          DateTime
-  addressOne           String
-  addressTwo           String?
+  nationality          String
+  currentAddress       String
+  permanentAddress     String?
   city                 String
   state                String
   country              String
@@ -47,6 +48,7 @@ model PersonalInformation {
   reasonForApplication String
   validIdUrl           String?
   facebookUrl          String?
+  academicInformation  AcademicInformation?
 
   // Student Fields
   degreeLevel   DegreeLevel?
@@ -55,6 +57,18 @@ model PersonalInformation {
   // USER REFERENCE
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
+}
+
+model AcademicInformation {
+  id                 String              @id @default(uuid())
+  status             AcademicStatus
+  schoolAddress      String
+  educationLevel     DegreeLevel
+  lastSchoolAttended String
+  currentCourse      String
+  desiredCourse      String
+  user               PersonalInformation @relation(fields: [userInfoId], references: [id])
+  userInfoId         String              @unique
 }
 
 model RelationshipInfo {
@@ -192,4 +206,9 @@ enum Gender {
 enum ProgramType {
   GRANT
   SCHOLARSHIP
+}
+
+enum AcademicStatus {
+  ENROLLED
+  NOT_ENROLLED
 }
