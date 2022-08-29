@@ -9,7 +9,6 @@
 	import Sidebar from '$root/components/dashboard/sidebar.svelte';
 	import Container from '$root/components/common/container.svelte';
 
-
 	let routes: RouteData[];
 	let sidebar: SidebarComponent;
 

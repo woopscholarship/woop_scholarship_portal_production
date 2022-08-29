@@ -3,6 +3,6 @@
   import { goto } from '$app/navigation';
 
   onMount(() => {
-    goto('/student/dashboard')
+    goto('/student/profile')
   })
 </script>

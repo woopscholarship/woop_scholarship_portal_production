@@ -42,23 +42,25 @@ export const studentRoutes = {
       text: 'Profile',
       href: '/student/profile'
     },
-    {
-      text: 'Settings',
-      href: '/student/settings'
-    },
   ],
   main: [
-    {
-      text: 'Dashboard',
-      href: '/student/dashboard'
-    },
+    // {
+    //   text: 'Dashboard',
+    //   href: '/student/dashboard'
+    // },
     {
       text: 'Apply Scholarship',
       href: '/student/apply-scholarship'
     },
     {
-      text: 'Applied Scholarship',
-      href: '/student/applied-scholarship'
+      text: 'Applied Scholarships',
+      href: '/student/applied-scholarships'
     },
+  ],
+  integrated: [
+    // {
+    //   text: 'Student Loan',
+    //   href: '/student/apply-student-loan-program'
+    // }
   ]
 }

@@ -1,6 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import prisma from '$root/lib/prisma';
-import { scholarship } from '$root/utils/prisma';
 
 export const GET: RequestHandler = async () => {
 	const currentIndex = 0;
