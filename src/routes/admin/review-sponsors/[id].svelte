@@ -14,12 +14,12 @@
 	const tableData = [
 		{
 			title: {
-				title: 'User Details',
+				title: 'Sponsor Information',
 				subtitle: 'Primary account details '
 			},
 			items: [
 				{
-					label: 'Full Name',
+					label: 'Sponsor Name',
 					value: user.displayName
 				},
 				{
@@ -36,73 +36,41 @@
 				}
 			]
 		},
-		{
-			title: {
-				title: 'Personal Information',
-				subtitle: 'Personal details and application.'
-			},
-			items: [
-				{
-					label: 'First Name',
-					value: userDetails.firstName
-				},
-				{
-					label: 'Middle Name',
-					value: userDetails.middleName ?? 'N/A'
-				},
-				{
-					label: 'Last Name',
-					value: userDetails.lastName
-				},
-				{
-					label: 'Birth Date',
-					value: userDetails.dateOfBirth!
-				},
-				{
-					label: 'Marital Status',
-					value: userDetails.maritalStatus
-				},
-				{
-					label: 'Gender',
-					value: userDetails.gender
-				},
-				{
-					label: 'Degree Level',
-					value: userDetails.degreeLevel!
-				},
-				{
-					label: 'Degree Program',
-					value: userDetails.degreeProgram!
-				}
-			]
-		},
 
 		{
 			title: {
-				title: 'Contact Information',
-				subtitle: 'Contact details'
+				title: 'Address',
+				subtitle: 'Address'
 			},
 			items: [
 				{
-					label: 'Address One',
-					value: userDetails.addressOne
-				},
-				{
-					label: 'Address Two',
-					value: userDetails.addressTwo ?? 'N/A'
+					label: 'Address',
+					value: userDetails.permanentAddress
 				},
 				{
 					label: 'City',
-					value: userDetails.city
+					value: userDetails.permanentCity
 				},
 				{
 					label: 'State',
-					value: userDetails.state
+					value: userDetails.permanentState
 				},
 				{
 					label: 'Country',
-					value: userDetails.country
+					value: userDetails.permanentCountry
 				},
+				{
+					label: 'Country',
+					value: userDetails.permanentPostalCode
+				},
+			]
+		},
+		{
+			title: {
+				title: 'Contact Details',
+				subtitle: 'Contact Details'
+			},
+			items: [
 				{
 					label: 'Phone Number',
 					value: userDetails.phoneNumber
@@ -117,56 +85,6 @@
 				}
 			]
 		},
-		{
-			title: {
-				title: 'Organization Information',
-				subtitle: 'Organization details and contact'
-			},
-			items: [
-				{
-					label: 'Logo',
-					value: organization.logo,
-					type: 'image'
-				},
-				{
-					label: 'Name',
-					value: organization.name
-				},
-				{
-					label: 'Address',
-					value: organization.address
-				},
-				{
-					label: 'City',
-					value: organization.city
-				},
-				{
-					label: 'State',
-					value: organization.state
-				},
-				{
-					label: 'Country',
-					value: organization.country
-				},
-				{
-					label: 'Email',
-					value: organization.email
-				},
-				{
-					label: 'Phone',
-					value: organization.phoneNumber
-				},
-				{
-					label: 'website',
-					value: organization.website
-				},
-				{
-					label: 'Description',
-					value: organization.description
-				}
-			]
-		},
-
 		{
 			title: {
 				title: 'Reason For Application',

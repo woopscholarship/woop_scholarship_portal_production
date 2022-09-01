@@ -16,7 +16,9 @@ export const GET: RequestHandler = async () => {
 export const POST: RequestHandler = async ({ request }) => {
 	const form = await request.formData();
 	const status = <'APPROVED' | 'REJECTED' | 'PENDING'>String(form.get('status'));
-	const studentApplications = await studentApplication.filterApplications(status);
+	const query = String(form.get('query'));
+
+	const studentApplications = await studentApplication.filterApplications(status, query);
 
 	return {
 		headers: { 'Content-Type': 'application/json' },

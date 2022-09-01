@@ -76,30 +76,66 @@
 		},
 		{
 			title: {
+				title: 'Current Address',
+				subtitle: 'Current address and contact details.'
+			},
+			items: [
+				{
+					label: 'Address',
+					value: userDetails.currentAddress
+				},
+				{
+					label: 'City',
+					value: userDetails.currentCity
+				},
+				{
+					label: 'State',
+					value: userDetails.currentState
+				},
+				{
+					label: 'Country',
+					value: userDetails.currentCountry
+				},
+				{
+					label: 'Postal Code',
+					value: userDetails.currentPostalCode
+				}
+			]
+		},
+		{
+			title: {
+				title: 'Permanent Address',
+				subtitle: 'Permanent address and contact details.'
+			},
+			items: [
+				{
+					label: 'Address',
+					value: userDetails.permanentAddress
+				},
+				{
+					label: 'City',
+					value: userDetails.permanentCity
+				},
+				{
+					label: 'State',
+					value: userDetails.permanentState
+				},
+				{
+					label: 'Country',
+					value: userDetails.permanentCountry
+				},
+				{
+					label: 'Postal Code',
+					value: userDetails.permanentPostalCode
+				}
+			]
+		},
+		{
+			title: {
 				title: 'Contact Information',
 				subtitle: 'Contact details'
 			},
 			items: [
-				{
-					label: 'Address One',
-					value: userDetails.addressOne
-				},
-				{
-					label: 'Address Two',
-					value: userDetails.addressTwo ?? 'N/A'
-				},
-				{
-					label: 'City',
-					value: userDetails.city
-				},
-				{
-					label: 'State',
-					value: userDetails.state
-				},
-				{
-					label: 'Country',
-					value: userDetails.country
-				},
 				{
 					label: 'Phone Number',
 					value: userDetails.phoneNumber
@@ -167,8 +203,8 @@
 				{
 					label: 'Valid ID / Student ID',
 					value: userDetails.validIdUrl,
-					type: 'image',
-				},
+					type: 'image'
+				}
 			]
 		}
 	];

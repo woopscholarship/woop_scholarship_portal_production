@@ -28,6 +28,9 @@
 
 <h2 class="text-gray-700 text-lg font-semibold">Filter</h2>
 <form method="POST" class="flex item-center justify-center my-4 gap-4" action={$page.url.pathname}>
+
+	<input id="query" name="query" type="text" class="flex-1 px-2" placeholder="Scholarship">
+
 	<select
 		id="status"
 		name="status"
@@ -37,6 +40,7 @@
 		<option value="PENDING">PENDING</option>
 		<option value="REJECTED">REJECTED</option>
 	</select>
+
 
 	<input
 		type="submit"
@@ -48,7 +52,6 @@
 <DataTable table$aria-label="Todo list" style="width: 100%;">
 	<Head>
 		<Row>
-			<Cell>ID</Cell>
 			<Cell>Sponsor</Cell>
 			<Cell>Scholarship Name</Cell>
 			<Cell>Status</Cell>
@@ -62,11 +65,13 @@
 		{:else}
 			{#each slice as item (item.id)}
 				<Row>
-					<Cell>{item.id}</Cell>
-					<Cell class="p-4">
-						<div><img class="rounded" src={item.sponsorUser.profileImageUrl} alt="" /></div>
-						<div>{item.sponsorUser.displayName}</div>
-						<div class="text-xs text-gray-700">{item.sponsorUser.email}</div>
+					<Cell class="p-4 flex gap-4">
+						<img class="rounded-full w-10 h-10" src={item.sponsorUser.profileImageUrl} alt="" />
+
+						<div>
+							<div>{item.sponsorUser.displayName}</div>
+							<div class="text-xs text-gray-700">{item.sponsorUser.email}
+						</div>
 					</Cell>
 					<Cell>{item.name}</Cell>
 					<Cell><StatusBadge status={item.reviewStatus} /></Cell>

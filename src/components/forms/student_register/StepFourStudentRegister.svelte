@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte/internal';
-	import InlineContainer from '$lib/components/container/InlineContainer.svelte';
-	import Input from '$lib/components/common/Input.svelte';
+	import InlineContainer from '$root/components/container/InlineContainer.svelte';
+	import Input from '$root/components/common/Input.svelte';
 
 	let inputItems = [
 		{

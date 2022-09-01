@@ -30,6 +30,9 @@
 
 <h2 class="text-gray-700 text-lg font-semibold">Filter</h2>
 <form method="POST" class="flex item-center justify-center my-4 gap-4" action={$page.url.pathname}>
+	<input id="query" name="query" type="text" class="flex-1 px-2" placeholder="Student Email">
+
+
 	<select
 		id="status"
 		name="status"
@@ -50,7 +53,6 @@
 <DataTable table$aria-label="Todo list" style="width: 100%;">
 	<Head>
 		<Row>
-			<Cell>ID</Cell>
 			<Cell>Student Applicant</Cell>
 			<Cell>Type</Cell>
 			<Cell>Application Date</Cell>
@@ -64,10 +66,9 @@
 		{:else}
 			{#each slice as item (item.id)}
 				<Row>
-					<Cell>{item.id}</Cell>
 					<Cell class="flex items-center gap-4">
 						<div>
-							<img src={item.studentUser.profileImageUrl} alt={item.studentUser.displayName} />
+							<img class="rounded-full w-10 h-10" src={item.studentUser.profileImageUrl} alt={item.studentUser.displayName} />
 						</div>
 						<div class="flex flex-col">
 							<span>{item.studentUser.displayName}</span>

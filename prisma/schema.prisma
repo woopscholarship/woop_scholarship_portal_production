@@ -22,7 +22,6 @@ model User {
 
   // SPONSOR FIELDS
   scholarshipProgram ScholarshipProgram[]
-  organization       OrganizationInfo?
 
   // STUDENT FIELDS
   scholarshipApplications StudentApplication[]
@@ -34,21 +33,28 @@ model PersonalInformation {
   firstName            String
   middleName           String?
   lastName             String
-  maritalStatus        MaritalStatus
-  gender               Gender
-  dateOfBirth          DateTime
-  nationality          String
-  currentAddress       String
-  permanentAddress     String?
-  city                 String
-  state                String
-  country              String
+  maritalStatus        MaritalStatus?
+  gender               Gender?
+  dateOfBirth          DateTime?
+  nationality          String?
   phoneNumber          String
   relationship         RelationshipInfo?
   reasonForApplication String
   validIdUrl           String?
   facebookUrl          String?
   academicInformation  AcademicInformation?
+
+  // Address Properties
+  currentAddress      String
+  currentCity         String
+  currentState        String
+  currentCountry      String
+  currentPostalCode   String
+  permanentAddress    String
+  permanentCity       String
+  permanentState      String
+  permanentCountry    String
+  permanentPostalCode String
 
   // Student Fields
   degreeLevel   DegreeLevel?
@@ -60,15 +66,20 @@ model PersonalInformation {
 }
 
 model AcademicInformation {
-  id                 String              @id @default(uuid())
-  status             AcademicStatus
-  schoolAddress      String
-  educationLevel     DegreeLevel
-  lastSchoolAttended String
-  currentCourse      String
-  desiredCourse      String
-  user               PersonalInformation @relation(fields: [userInfoId], references: [id])
-  userInfoId         String              @unique
+  id String @id @default(uuid())
+
+  currentSchoolAddress  String
+  currentSchool         String
+  currentEducationLevel DegreeLevel
+  currentCourse         String
+
+  previousSchoolAddress  String?
+  previousSchoolAttended String?
+  previousEducationLevel DegreeLevel?
+  desiredCourse          String?
+
+  user       PersonalInformation @relation(fields: [userInfoId], references: [id])
+  userInfoId String              @unique
 }
 
 model RelationshipInfo {
@@ -110,30 +121,14 @@ model ScholarshipProgram {
   phoneNumber String?
   website     String?
 
+  // Additional Form Inputs when Applying For Grant
+  typeOfGrantApplication    String?
+  reasonForGrantApplication String?
+  reasonWhyYourDeserveGrant String?
+
   // SPONSOR USER REFERENCE
   sponsorUser   User?   @relation(fields: [sponsorUserId], references: [id])
   sponsorUserId String?
-
-  // ORGANIZATION REFERENCE
-  organization   OrganizationInfo? @relation(fields: [organizationId], references: [id])
-  organizationId String?
-}
-
-model OrganizationInfo {
-  id                 String               @id @default(uuid())
-  name               String               @unique
-  logo               String?
-  description        String
-  address            String
-  city               String
-  state              String
-  country            String
-  email              String?
-  phoneNumber        String?
-  website            String?
-  sponsorUser        User                 @relation(fields: [sponsorUserId], references: [id])
-  sponsorUserId      String               @unique
-  ScholarshipProgram ScholarshipProgram[]
 }
 
 model StudentApplication {

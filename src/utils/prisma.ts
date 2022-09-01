@@ -10,6 +10,9 @@ export const scholarship = {
 	 */
 	async getAllPrograms() {
 		const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
+			where:{
+				reviewStatus: 'PENDING'
+			},
 			include: {
 				sponsorUser: true
 			}
@@ -83,12 +86,30 @@ export const scholarship = {
 	 * @param status The status of the scholarship program
 	 * @returns The scholarship programs
 	 */
-	async filterScholarships(status: ReviewStatus) {
+	async filterScholarships(status: ReviewStatus, query?: string) {
+
+		if(query) {
+
+			const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
+				where: {
+					name: {
+						contains: query
+					}
+				},
+				include: {
+					sponsorUser: true
+				}
+			});
+	
+			return scholarshipPrograms;
+		}
+
+
 		const scholarshipPrograms = await prisma.scholarshipProgram.findMany({
 			where: {
 				reviewStatus: {
 					equals: status
-				}
+				},
 			},
 			include: {
 				sponsorUser: true
@@ -96,6 +117,8 @@ export const scholarship = {
 		});
 
 		return scholarshipPrograms;
+
+
 	}
 };
 
@@ -125,28 +148,10 @@ export const user = {
 			where: { id: id }
 		});
 
-		console.log('user', user);
-
 		const userDetails = <PersonalInformation>await prisma.personalInformation.findFirst({
 			where: { userId: id },
-			include: { relationship: true }
+			include: { relationship: true, academicInformation: true }
 		});
-
-		// Get Additional Sponsor Details if User is a Sponsor
-		if (user.userType === 'SPONSOR') {
-			// Get Organization Details
-			const organization = <OrganizationInfo>await prisma.organizationInfo.findFirst({
-				where: {
-					sponsorUserId: id
-				}
-			});
-
-			return {
-				user,
-				userDetails,
-				organization
-			};
-		}
 
 		// DEFAULT RETURN
 		return {
@@ -265,7 +270,26 @@ export const studentApplication = {
 	 * @param status - Status to filter by
 	 * @returns All student applications
 	 */
-	async filterApplications(status: ReviewStatus) {
+	async filterApplications(status: ReviewStatus, query?: string) {
+
+		if(query) {
+			const studentApplications = await prisma.studentApplication.findMany({
+				where: {
+					studentUser: {
+						email: {
+							contains: query
+						}
+					}
+				},
+				include: {
+					studentUser: true
+				}
+			});
+	
+			return studentApplications;
+		}
+
+		
 		const studentApplications = await prisma.studentApplication.findMany({
 			where: {
 				status: {

@@ -1,13 +1,13 @@
 <script lang="ts">
 	// @ts-nocheck
 
-	import { phoneCodeValid } from '../../../../stores/registerStore';
+	import { phoneCodeValid } from '$root/stores/registerStore';
 	import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 	import { onMount } from 'svelte/internal';
 	import validatePhoneNumber from '$lib/validation/validatePhoneNumber';
-	import Input from '$lib/components/common/Input.svelte';
-	import InlineContainer from '$lib/components/container/InlineContainer.svelte';
-	import Button from '$lib/components/common/Button.svelte';
+	import Input from '$root/components/common/Input.svelte';
+	import InlineContainer from '$root/components/container/InlineContainer.svelte';
+	import Button from '$root/components/common/Button.svelte';
 
 	// Component Data
 	const inputItems = [
