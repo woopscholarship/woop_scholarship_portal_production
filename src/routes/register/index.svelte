@@ -65,15 +65,11 @@
 						isLoggedIn.update(() => true);
 						userId.update(() => user.uid);
 						localStorage.setItem('userId', user.uid);
-						goto('/setup-account');
+						goto('/login');
 					})
 					.catch((error) => {
 						console.error(error);
 					});
-
-					
-				goto(`setup-account/${$accountType === 'student' ? 'student' : 'sponsor'}`)
-
 			})
 			.catch((error) => {
 				if (error.code === 'auth/email-already-in-use') {

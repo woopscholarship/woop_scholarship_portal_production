@@ -1,66 +1,99 @@
 <script lang="ts">
 	// @ts-nocheck
 
-	import { phoneCodeValid } from '$root/stores/registerStore';
-	import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+	import { getAuth } from 'firebase/auth';
 	import { onMount } from 'svelte/internal';
-	import validatePhoneNumber from '$lib/validation/validatePhoneNumber';
 	import Input from '$root/components/common/Input.svelte';
 	import InlineContainer from '$root/components/container/InlineContainer.svelte';
-	import Button from '$root/components/common/Button.svelte';
 
 	// Component Data
 	const inputItems = [
 		[
 			{
 				type: 'text',
-				id: 'addressOne',
-				name: 'addressOne',
-				placeholder: 'Enter Address Line 1',
-				label: 'Address 1',
+				id: 'currentAddress',
+				name: 'currentAddress',
+				placeholder: 'Enter Current Address',
+				label: 'Current Address',
 				required: true
 			},
 			{
 				type: 'text',
-				id: 'addressTwo',
-				name: 'addressTwo',
-				placeholder: 'Enter Address Line 2',
-				label: 'Address 2'
+				id: 'permanentAddress',
+				name: 'permanentAddress',
+				placeholder: 'Enter Permanent Address',
+				label: 'Permanent Address'
 			}
 		],
 		[
 			{
 				type: 'text',
-				id: 'city',
-				name: 'city',
+				id: 'currentCity',
+				name: 'currentCity',
 				placeholder: 'Enter City',
-				label: 'City',
+				label: 'Current City',
 				required: true
 			},
 			{
 				type: 'text',
-				id: 'province',
-				name: 'province',
-				placeholder: 'Enter Province',
-				label: 'Province',
+				id: 'permanentCity',
+				name: 'permanentCity',
+				placeholder: 'Enter Permanent Address',
+				label: 'Permanent Address',
 				required: true
 			}
 		],
 		[
 			{
 				type: 'text',
-				id: 'country',
-				name: 'country',
-				placeholder: 'Enter Country',
-				label: 'Country',
+				id: 'currentState',
+				name: 'currentState',
+				placeholder: 'Enter Current State',
+				label: 'Current State',
 				required: true
 			},
 			{
 				type: 'text',
-				id: 'postalCode',
-				name: 'postalCode',
-				placeholder: 'Enter Postal Code',
-				label: 'Postal Code',
+				id: 'permanentState',
+				name: 'permanentState',
+				placeholder: 'Enter Permanent State',
+				label: 'Permanent State',
+				required: true
+			}
+		],
+		[
+			{
+				type: 'text',
+				id: 'currentCountry',
+				name: 'currentCountry',
+				placeholder: 'Enter Current Country',
+				label: 'Current Country',
+				required: true
+			},
+			{
+				type: 'text',
+				id: 'permanentCountry',
+				name: 'permanentCountry',
+				placeholder: 'Enter Permanent Country',
+				label: 'Permanent Country',
+				required: true
+			}
+		],
+		[
+			{
+				type: 'text',
+				id: 'currentPostalCode',
+				name: 'currentPostalCode',
+				placeholder: 'Enter Current Postal Code',
+				label: 'Current Postal Code / Zip Code',
+				required: true
+			},
+			{
+				type: 'text',
+				id: 'permanentPostalCode',
+				name: 'permanentPostalCode',
+				placeholder: 'Enter Current Permanent Code',
+				label: 'Permanent Postal Code / Zip Code',
 				required: true
 			}
 		],
@@ -72,7 +105,7 @@
 				placeholder: '+639669257362',
 				label: 'Phone Number',
 				required: true
-			},
+			}
 			// {
 			// 	type: 'text',
 			// 	id: 'phoneCode',
@@ -84,101 +117,71 @@
 	];
 
 	const auth = getAuth();
-	$: invalidPhoneNumber = false;
-	$: invalidPhoneCode = false;
-	$: verificationSent = false;
-
-	async function sendPhoneSMS() {
-		const phoneNumber = (<HTMLInputElement>document.querySelector('#phoneNumber'))!.value;
-
-		window.recaptchaVerifier = new RecaptchaVerifier(
-			'g-recaptcha',
-			{
-				size: 'invisible',
-				callback: (response: any) => {
-					// onSignInSubmit();
-				}
-			},
-			auth
-		);
-
-		if (!validatePhoneNumber(phoneNumber)) {
-			invalidPhoneNumber = true;
-			return;
-		}
-
-		verificationSent = true;
-		invalidPhoneNumber = false;
-
-		try {
-			const confirmationResult = await signInWithPhoneNumber(
-				auth,
-				phoneNumber,
-				window.recaptchaVerifier
-			);
-			window.confirmationResult = confirmationResult;
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	// async function verifyPhoneCode(confirmationResult: any) {
-	// 	const phoneCode = (<HTMLInputElement>document.querySelector('#phoneCode'))!.value;
-	// 	window.confirmationResult
-	// 		.confirm(phoneCode)
-	// 		.then((result: any) => {
-	// 			phoneCodeValid.update(() => true);
-	// 		})
-	// 		.catch((err) => {
-	// 			if (err.message === 'Firebase: Error (auth/invalid-verification-code).') {
-	// 				invalidPhoneCode = true;
-	// 			}
-	// 		});
-
-	// 	verificationSent = false;
-	// 	invalidPhoneNumber = false;
-	// }
 
 	export let isProcessDone = false;
-	export let data = {};
+	export let processData: any = {};
 
 	let inputElementIds = [
-		'#addressOne',
-		'#city',
-		'#province',
-		'#country',
-		'#postalCode',
+		'#currentAddress',
+		'#currentCity',
+		'#currentState',
+		'#currentCountry',
+		'#currentPostalCode',
+		'#permanentAddress',
+		'#permanentCity',
+		'#permanentState',
+		'#permanentCountry',
+		'#permanentPostalCode',
 		'#phoneNumber'
 	];
 
 	onMount(() => {
 		inputElementIds.forEach((inputItemId) => {
 			document.querySelector(inputItemId)?.addEventListener('change', () => {
-				const addressOne = (<HTMLInputElement>document.querySelector('#addressOne'))!.value;
-				const addressTwo = (<HTMLInputElement>document.querySelector('#addressTwo'))!.value;
-				const city = (<HTMLInputElement>document.querySelector('#city'))!.value;
-				const province = (<HTMLInputElement>document.querySelector('#province'))!.value;
-				const country = (<HTMLInputElement>document.querySelector('#country'))!.value;
-				const postalCode = (<HTMLInputElement>document.querySelector('#postalCode'))!.value;
+				const currentAddress = (<HTMLInputElement>document.querySelector('#currentAddress'))!.value;
+				const currentCity = (<HTMLInputElement>document.querySelector('#currentCity'))!.value;
+				const currentState = (<HTMLInputElement>document.querySelector('#currentState'))!.value;
+				const currentCountry = (<HTMLInputElement>document.querySelector('#currentPostalCode'))!
+					.value;
+				const currentPostalCode = (<HTMLInputElement>document.querySelector('#currentPostalCode'))!
+					.value;
+				const permanentAddress = (<HTMLInputElement>document.querySelector('#permanentAddress'))!
+					.value;
+				const permanentCity = (<HTMLInputElement>document.querySelector('#permanentCity'))!.value;
+				const permanentState = (<HTMLInputElement>document.querySelector('#permanentState'))!.value;
+				const permanentCountry = (<HTMLInputElement>document.querySelector('#permanentCountry'))!
+					.value;
+				const permanentPostalCode = (<HTMLInputElement>(
+					document.querySelector('#permanentPostalCode')
+				))!.value;
 				const phoneNumber = (<HTMLInputElement>document.querySelector('#phoneNumber'))!.value;
 
 				if (
-					addressOne !== '' &&
-					province !== '' &&
-					country !== '' &&
-					postalCode !== '' &&
+					currentAddress !== '' &&
+					currentCity !== '' &&
+					currentState !== '' &&
+					currentCountry !== '' &&
+					currentPostalCode !== '' &&
+					permanentAddress !== '' &&
+					permanentCity !== '' &&
+					permanentState !== '' &&
+					permanentCountry !== '' &&
+					permanentPostalCode !== '' &&
 					phoneNumber !== ''
 				) {
-					
-					data = {
-						addressOne, 
-						addressTwo,
-						city,
-						province,
-						country,
-						postalCode,
+					processData = {
+						currentAddress,
+						currentCity,
+						currentState,
+						currentCountry,
+						currentPostalCode,
+						permanentAddress,
+						permanentCity,
+						permanentState,
+						permanentCountry,
+						permanentPostalCode,
 						phoneNumber
-					}
+					};
 
 					isProcessDone = true;
 				}
@@ -215,12 +218,12 @@
 	<InlineContainer>
 		{#each inputItem as item, y}
 			<!-- {#if x === inputItems.length - 1} -->
-				<!-- <Input {...item} inputStyle="inline">
+			<!-- <Input {...item} inputStyle="inline">
 					{#if y === 0} -->
-						<!-- <Button id="sendPhoneCode" style="height:39px;" onClick={sendPhoneSMS}>Send SMS</Button> -->
-					<!-- {/if} -->
-					<!-- VERIFY PHONE CODE -->
-					<!-- {#if y === 1}
+			<!-- <Button id="sendPhoneCode" style="height:39px;" onClick={sendPhoneSMS}>Send SMS</Button> -->
+			<!-- {/if} -->
+			<!-- VERIFY PHONE CODE -->
+			<!-- {#if y === 1}
 						<div>
 							<div id="g-recaptcha" />
 							<Button
@@ -231,20 +234,18 @@
 							>
 						</div>
 					{/if} -->
-				<!-- </Input> -->
+			<!-- </Input> -->
 			<!-- {:else}
 				<Input {...item} />
 			{/if} -->
 
-
 			<Input {...item} />
-
 		{/each}
 	</InlineContainer>
 {/each}
 
 <style lang="scss">
-	@import '../../../../styles/colors';
+	@import '../../../styles/colors';
 
 	.verification-prompt {
 		color: $primary-color;

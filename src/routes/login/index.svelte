@@ -1,53 +1,63 @@
 <script lang="ts">
+	import { onMount } from 'svelte/internal';
 	import Icon from 'svelte-awesome';
 	import google from 'svelte-awesome/icons/google';
-
 	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+	import { isLoggedIn, accountType, userId } from '$root/stores/authStore';
+	import { goto } from '$app/navigation';
+
 	const auth = getAuth();
 
-	// User Error Message Log
-	let errorOccured = false;
-	let errorMessage = '';
 
-	const displayErrorMessage = (error: any) => {
-		console.log('Code:', error.code);
-		console.log('Message:', error.message);
+	$:errorMessage = '';
 
-		if (
-			error.code === 'auth/wrong-password' ||
-			error.code === 'auth/missing-email' ||
-			error.code === 'auth/user-not-found'
-		) {
-			errorOccured = true;
-			errorMessage = 'Incorrect Password / Email. Please Try Again';
-		}
-	};
 
-	function login() {
+	async function login() {
 		const email = (<HTMLInputElement>document.querySelector('#email'))!.value;
-		const password = (<HTMLInputElement>document.querySelector('#password')).value;
+		const password = (<HTMLInputElement>document.querySelector('#password'))!.value;
+		const auth = getAuth();
 
-		signInWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				const user = userCredential.user;
-				localStorage.setItem('uid', user.uid);
-				console.log('login successful');
-			})
-			.catch((error) => {
-				displayErrorMessage(error);
+		// Clear error message after every login attempt
+		errorMessage = '';
+
+		try {
+			const userCred = await signInWithEmailAndPassword(auth, email, password)
+
+			// GET USER DATA
+			const response = await fetch('./api/getUserData', {
+				method: 'POST',
+				body: JSON.stringify({email: email})
 			});
+			const data = await response.json();
+
+			// IF USER DATA IS NOT SET REDIRECT USER TO SETUP ACCOUNT PAGE
+			if(data.user === null || data.user === undefined) {
+				goto('/setup-account')
+			}
+
+			else {
+				goto('/'+ data.user.userType.toLowerCase())
+			}
+
+		}
+		catch(err: any) {
+			if(err) {
+				errorMessage = 'Error Occured. Please Try Logging in again.'
+			}
+		}
+
+	
 	}
+
+	
 </script>
 
 <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
 	<div class="bg-white py-8 px-4 sm:px-10">
-		{#if errorOccured}
-			<p class="text-sm font-semibold italic mb-2 mx-auto mt-4">
-				{errorMessage}
-			</p>
-		{/if}
-
 		<form on:submit|preventDefault={login} class="space-y-6" action="#" method="POST">
+			{#if errorMessage !== ''}
+				<p class="text-red-500">{errorMessage}</p>
+			{/if}
 			<div>
 				<label for="email" class="block text-sm font-medium text-gray-700"> Email Address </label>
 				<div class="mt-1">
@@ -57,6 +67,7 @@
 						type="email"
 						autocomplete="email"
 						required
+						value="paulreyesdigital@gmail.com"
 						class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
 					/>
 				</div>
@@ -71,6 +82,7 @@
 						type="password"
 						autocomplete="current-password"
 						required
+						value="123123123"
 						class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
 					/>
 				</div>
@@ -103,15 +115,15 @@
 
 		<div class="mt-6">
 			<div class="relative">
-				<div class="absolute inset-0 flex items-center">
+				<!-- <div class="absolute inset-0 flex items-center">
 					<div class="w-full border-t border-gray-300" />
-				</div>
-				<div class="relative flex justify-center text-sm">
+				</div> -->
+				<!-- <div class="relative flex justify-center text-sm">
 					<span class="px-2 bg-white text-gray-500"> Or continue with </span>
-				</div>
+				</div> -->
 			</div>
 
-			<div class="mt-6 grid grid-cols-2 gap-3">
+			<!-- <div class="mt-6 grid grid-cols-2 gap-3">
 				<div>
 					<a
 						href="#"
@@ -136,11 +148,11 @@
 						<Icon data={google} scale={1.3} />
 					</a>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </div>
 
 <p class="not-registered-section">
-	Not registered yet? <span><a href="/select-account">Register now</a></span>
+	Not registered yet? <span><a href="/register">Register now</a></span>
 </p>

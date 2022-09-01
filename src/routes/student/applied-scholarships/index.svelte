@@ -1,14 +1,37 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import StatusBadge from '$root/components/statusBadge.svelte';
-	import { currentUser } from '$root/stores/authStore';
 	import DataTable, { Head, Body, Row, Cell, Pagination } from '@smui/data-table';
 	import Select, { Option } from '@smui/select';
 	import IconButton from '@smui/icon-button';
 	import { Label } from '@smui/common';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte/internal';
+	import { getAuth, onAuthStateChanged } from 'firebase/auth';
+	import { isLoggedIn, accountType, userId } from '$root/stores/authStore';
 
+
+
+	let currentUser: any;
 	export let studentApplications: any;
 
+	onMount(async () => {
+		const auth = getAuth();
+		currentUser = auth.currentUser;
+
+		if (!currentUser) {
+			goto('/login');
+		}
+
+		onAuthStateChanged(auth, (user) => {
+			if (!user) {
+				isLoggedIn.update(() => false);
+				accountType.update(() => '');
+				userId.update(() => '');
+				goto('/login');
+			}
+		});
+	});
 
 
 	let rowsPerPage = 10;

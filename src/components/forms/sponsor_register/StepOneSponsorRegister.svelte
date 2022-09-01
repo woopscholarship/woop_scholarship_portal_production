@@ -23,7 +23,7 @@
 	];
 
 	export let isProcessDone = false;
-	export let data = {};
+	export let processData = {};
 
 	onMount(() => {
 		inputItems.forEach((input) => {
@@ -34,7 +34,7 @@
 				if(orgName !== '' && reason !== '') {
 
 					// save to exportable component prop
-					data = {
+					processData = {
 						orgName: orgName,
 						reason: reason,
 					}

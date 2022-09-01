@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import prisma from '$root/lib/prisma';
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({request}) => {
 	const studentUser = await prisma.user.findFirst({
 		where: {
 			userType: {

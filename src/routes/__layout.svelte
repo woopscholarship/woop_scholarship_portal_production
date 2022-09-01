@@ -1,18 +1,34 @@
 <script lang="ts">
 	import '../app.css';
-  import app from '$lib/initFirebase';
-  import { getAuth, onAuthStateChanged } from 'firebase/auth';
+	import app from '$lib/initFirebase';
+	import { getAuth, onAuthStateChanged } from 'firebase/auth';
 	import { onMount } from 'svelte';
-  import { goto } from '$app/navigation';
-  import { isLoggedIn } from '../stores/authStore';
+	import { goto } from '$app/navigation';
+	import { isLoggedIn, accountType, userId } from '../stores/authStore';
 
-	onMount(() => {
+	onMount(async () => {
 		const auth = getAuth();
-		onAuthStateChanged(auth, (user) => {
+		onAuthStateChanged(auth, async (user) => {
 			if (user) {
+				const response = await fetch('/api/getUserData/', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email: user.email
+					})
+				});
+
+				const data = await response.json();
+
 				isLoggedIn.update(() => true);
+				accountType.update(() => data.user.userType);
+				userId.update(() => user.uid);
 			} else {
 				isLoggedIn.update(() => false);
+				accountType.update(() => '');
+				userId.update(() => '');
 				goto('/login');
 			}
 		});
@@ -37,8 +53,6 @@
 	<p class="w-1/2 text-center"><a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a></p>
 </footer>
 
-
-
 <style>
 	:global(:root) {
 		--primarycolor-dark: #0fb7a6;
@@ -51,7 +65,6 @@
 		--input-background-color-secondary: #e6e6e6;
 		--input-placeholder-color: #ddd;
 
-		--dashboard-sidebar-color: #11264B;
+		--dashboard-sidebar-color: #11264b;
 	}
-
 </style>

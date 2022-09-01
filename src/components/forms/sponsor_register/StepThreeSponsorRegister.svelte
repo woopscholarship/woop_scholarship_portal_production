@@ -82,69 +82,9 @@
 		]
 	];
 
-	const auth = getAuth();
-	$: invalidPhoneNumber = false;
-	$: invalidPhoneCode = false;
-	$: verificationSent = false;
-
-	async function sendPhoneSMS() {
-		const phoneNumber = (<HTMLInputElement>document.querySelector('#phoneNumber'))!.value;
-
-		window.recaptchaVerifier = new RecaptchaVerifier(
-			'g-recaptcha',
-			{
-				size: 'invisible',
-				callback: (response: any) => {
-					// onSignInSubmit();
-				}
-			},
-			auth
-		);
-
-		if (!validatePhoneNumber(phoneNumber)) {
-			invalidPhoneNumber = true;
-			return;
-		}
-
-		verificationSent = true;
-		invalidPhoneNumber = false;
-
-		try {
-			const confirmationResult = await signInWithPhoneNumber(
-				auth,
-				phoneNumber,
-				window.recaptchaVerifier
-			);
-			window.confirmationResult = confirmationResult;
-		} catch (err) {
-			console.log(err);
-		}
-	}
-	$: {
-		console.log($phoneCodeValid);
-	}
-
-	async function verifyPhoneCode() {
-		console.log('verifyPhoneCode');
-
-		const phoneCode = (<HTMLInputElement>document.querySelector('#phoneCode'))!.value;
-		window.confirmationResult
-			.confirm(phoneCode)
-			.then((result: any) => {
-				phoneCodeValid.update(() => true);
-			})
-			.catch((err) => {
-				if (err.message === 'Firebase: Error (auth/invalid-verification-code).') {
-					invalidPhoneCode = true;
-				}
-			});
-
-		verificationSent = false;
-		invalidPhoneNumber = false;
-	}
 
 	export let isProcessDone = false;
-	export let data = {};
+	export let processData = {};
 
 	let inputElementIds = [
 		'#addressOne',
@@ -174,7 +114,7 @@
 					postalCode !== '' &&
 					phoneNumber !== ''
 				) {
-					data = {
+					processData = {
 						addressOne,
 						addressTwo,
 						city,

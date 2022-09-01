@@ -35,7 +35,7 @@ model PersonalInformation {
   lastName             String
   maritalStatus        MaritalStatus?
   gender               Gender?
-  dateOfBirth          DateTime?
+  dateOfBirth          String
   nationality          String?
   phoneNumber          String
   relationship         RelationshipInfo?
@@ -56,10 +56,6 @@ model PersonalInformation {
   permanentCountry    String
   permanentPostalCode String
 
-  // Student Fields
-  degreeLevel   DegreeLevel?
-  degreeProgram String?
-
   // USER REFERENCE
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
@@ -68,11 +64,10 @@ model PersonalInformation {
 model AcademicInformation {
   id String @id @default(uuid())
 
-  currentSchoolAddress  String
-  currentSchool         String
-  currentEducationLevel DegreeLevel
-  currentCourse         String
-
+  currentSchoolAddress   String
+  currentSchool          String
+  currentEducationLevel  DegreeLevel
+  currentCourse          String
   previousSchoolAddress  String?
   previousSchoolAttended String?
   previousEducationLevel DegreeLevel?
@@ -84,12 +79,10 @@ model AcademicInformation {
 
 model RelationshipInfo {
   id               String  @id @default(uuid())
-  motherPhotoUrl   String?
   motherFirstName  String?
   motherLastName   String?
   motherOccupation String?
   motherPhone      String?
-  fatherPhotoUrl   String?
   fatherFirstName  String?
   fatherLastName   String?
   fatherPhone      String?

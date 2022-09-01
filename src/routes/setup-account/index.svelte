@@ -1,131 +1,142 @@
 <script lang="ts">
-	import { accountType } from '$root/stores/authStore';
 	import { goto } from '$app/navigation';
-	import Input from '$root/components/common/Input.svelte';
 	import FormButton from '$root/components/common/FormButton.svelte';
+	import { onMount } from 'svelte/internal';
+	import { isLoggedIn, accountType, userId } from '$root/stores/authStore';
+	import { getAuth } from 'firebase/auth';
 
-	import {
-		getAuth,
-		createUserWithEmailAndPassword,
-		signInWithEmailAndPassword,
-		onAuthStateChanged
-	} from 'firebase/auth';
+	let isAccountTypeSelected = false;
 
-	import { isLoggedIn, userId } from '$root/stores/authStore';
+	onMount(() => {
+		const studentLabel = <HTMLInputElement>document.querySelector('label[for="student"]');
+		const sponsorLabel = <HTMLInputElement>document.querySelector('label[for="sponsor"]');
+		const studentOption = <HTMLInputElement>document.querySelector('#studentOption');
+		const sponsorOption = <HTMLInputElement>document.querySelector('#sponsorOption');
 
+		studentLabel.onclick = () => {
+			$accountType = 'student';
+			studentOption.checked = true;
+			sponsorOption.checked = false;
+		};
 
-	const inputItems = [
-		{
-			type: 'email',
-			name: 'email',
-			id: 'email',
-			placeholder: 'Enter Email Address',
-			label: 'Email Address'
-		},
-		{
-			type: 'password',
-			name: 'password',
-			id: 'password',
-			placeholder: 'Enter Password',
-			label: 'Password',
-			value: '123123123',
-		},
-		{
-			type: 'password',
-			name: 'confirmPassword',
-			id: 'confirmPassword',
-			placeholder: 'Confirm Password',
-			label: 'Confirm Password',
-			value: '123123123',
-		}
-	];
+		sponsorLabel.onclick = () => {
+			$accountType = 'sponsor';
+			sponsorOption.checked = true;
+			studentOption.checked = false;
+		};
+	});
 
-
-	let passwordInvalid = false;
-	let emailInvalid = false;
-
-function register() {
+	
+	onMount(() => {
 		const auth = getAuth();
+		const user = auth.currentUser;
+		console.log('user', user)
 
-		const email = (<HTMLInputElement>document.querySelector('#email'))!.value;
-		const password = (<HTMLInputElement>document.querySelector('#password'))!.value;
-		const confirmPassword = (<HTMLInputElement>document.querySelector('#confirmPassword'))!.value;
-
-		emailInvalid = false;
-		passwordInvalid = false;
-
-		if (password !== confirmPassword) {
-			passwordInvalid = true;
-			return;
+		if (user === null) {
+			goto('/login')
 		}
+	})
 
-		createUserWithEmailAndPassword(auth, email, password)
-			.then((userCredential) => {
-				signInWithEmailAndPassword(auth, email, password)
-					.then((userCredential) => {
-						const user = userCredential.user;
-						isLoggedIn.update(() => true);
-						userId.update(() => user.uid);
-						localStorage.setItem('userId', user.uid);
-					})
-					.catch((error) => {
-						console.error(error);
-					});
-			})
-			.catch((error) => {
-				if (error.code === 'auth/email-already-in-use') {
-					emailInvalid = true;
-				}
-			});
-	}
+
 
 </script>
 
+<form action="/register" method="POST" title="How should woop Identify you?">
+	<label for="student" class="account-option">
+		<input type="radio" id="studentOption" name="accountType" bind:value={$accountType} />
+		<span>I am a Student</span>
+	</label>
 
-
-<form on:submit|preventDefault >
-	{#if passwordInvalid}
-		<span class="invalid-prompt"> Password do not match. Please try again </span>
-	{/if}
-
-	{#if emailInvalid}
-		<span class="invalid-prompt">
-			Email Already in use. Please <a href="/login">login</a> to your account to continue the account
-			process</span
-		>
-	{/if}
-
-	{#each inputItems as items}
-		<Input {...items} />
-	{/each}
-
-  <br />
+	<label for="sponsor" class="account-option">
+		<input type="radio" id="sponsorOption" name="accountType" bind:value={$accountType} />
+		<span>I am a Sponsor</span>
+	</label>
 
 	<FormButton
 		type="button"
-		href={`setup-account/${$accountType === 'student' ? 'student' : 'sponsor'}`}
-		style="padding: 15px; font-weight: 700; font-size: 15px;">Continue</FormButton
+		style="padding: 15px; font-weight: 700; font-size: 15px;"
+		href={`setup-account/${$accountType}`}
+		disabled={$accountType === '' ? true : false}
+		onClick={() => (isAccountTypeSelected = !isAccountTypeSelected)}>Continue</FormButton
 	>
-
-	<p>
-		Already have an account? <a href="/login">Log in</a>
-	</p>
 </form>
 
-
 <style lang="scss">
-	@use '../../styles/mixin';
-	@import '../../styles/colors';
-
 	form {
-		@include mixin.flex-col;
+		display: flex;
+		flex-direction: column;
 		min-width: 373px;
 	}
 
 	p {
-		color: $register-form-subtitle-color;
-		font-weight: 600;
+		color: #a3adc1;
+		font-weight: 700;
 		margin: 0;
 		margin-bottom: 30px;
+	}
+
+	h2 {
+		margin-bottom: 15px;
+	}
+
+	p {
+		margin-top: 15px;
+	}
+
+	/* Label Styles */
+	label.account-option {
+		display: flex;
+		justify-content: flex-start;
+		background: #fff;
+		margin-bottom: 20px;
+		padding: 15px;
+		font-weight: 400;
+
+		font-size: 16px;
+		border: 1px solid #062c35;
+		border-radius: 5px;
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	/* Input Styles */
+
+	input[type='radio'] {
+		width: 20px;
+		margin-right: 15px;
+	}
+
+	input[type='radio']:focus,
+	input[type='radio']:active {
+		outline: none;
+	}
+
+	input[type='radio']:after {
+		width: 15px;
+		height: 15px;
+		border-radius: 15px;
+		top: -2px;
+		left: -1px;
+		position: relative;
+		content: '';
+		display: inline-block;
+		visibility: visible;
+	}
+
+	input[type='radio']:checked:after {
+		width: 10px;
+		height: 10px;
+
+		border-radius: 15px;
+		top: -1px;
+		left: 5px;
+		position: relative;
+		background-color: var(--primarycolor-dark);
+		content: '';
+		display: inline-block;
+		visibility: visible;
+		outline: var(--primarycolor-dark);
 	}
 </style>

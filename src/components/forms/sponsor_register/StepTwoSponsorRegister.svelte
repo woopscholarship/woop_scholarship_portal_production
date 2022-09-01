@@ -6,7 +6,7 @@
 	import { personalInfoItems } from '$lib/component_inits/initRegisterItems';
 
 	export let isProcessDone = false;
-	export let data = {};
+	export let processData = {};
 
 	const inputElementIds = [
 		'#firstName',
@@ -36,7 +36,7 @@
 					birthDate !== ''
 				) {
 					// save to exportable component prop
-					data = {
+					processData = {
 						firstName, 
 						middleName,
 						lastName,

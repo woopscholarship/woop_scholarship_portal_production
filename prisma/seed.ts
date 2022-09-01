@@ -67,12 +67,10 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				phoneNumber: faker.phone.number(),
 				relationship: {
 					create: {
-						motherPhotoUrl: faker.image.avatar(),
 						motherFirstName: faker.name.firstName(),
 						motherLastName: faker.name.lastName(),
 						motherOccupation: faker.name.jobTitle(),
 						motherPhone: faker.phone.number(),
-						fatherPhotoUrl: faker.image.avatar(),
 						fatherFirstName: faker.name.firstName(),
 						fatherLastName: faker.name.lastName(),
 						fatherOccupation: faker.name.jobTitle(),
