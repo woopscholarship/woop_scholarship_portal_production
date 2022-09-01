@@ -6,7 +6,8 @@
 		StudentApplication,
 		User,
 		PersonalInformation,
-		RelationshipInfo
+		RelationshipInfo,
+		AcademicInformation
 	} from '@prisma/client';
 
 	interface _StudentApplication extends StudentApplication {
@@ -19,6 +20,7 @@
 
 	interface _PersonalInformation extends PersonalInformation {
 		relationship: RelationshipInfo;
+		academicInformation: AcademicInformation;
 	}
 	export let student: _StudentApplication;
 
@@ -43,7 +45,8 @@
 
 	<div class="absolute left-72 top-6">
 		<h2 class="text-2xl font-bold">{studentUser.displayName}</h2>
-		<p class="text-lg font-bold text-primary">{capitalizeFirstLetter(userDetails.degreeLevel)}</p>
+		<p class="mt-4 text-lg font-bold text-primary">{capitalizeFirstLetter(userDetails.academicInformation.currentEducationLevel)}</p>
+		<p class="text-md font-bol">{capitalizeFirstLetter(userDetails.academicInformation.currentCourse)}</p>
 		<p class="mt-4">Date Applied: {student.appliedOn}</p>
 	</div>
 </div>
@@ -55,6 +58,7 @@
 		<p class="mt-2 text-sm text-gray-500">{student.reason}</p>
 	</div>
 
+
 	<div class="flex flex-wrap">
 		<!-- SECTION -->
 		<ReviewStudentTableContainer>
@@ -64,8 +68,6 @@
 			<ReviewStudentTableItem label='Gender' value={capitalizeFirstLetter(userDetails.gender)} />
 			<ReviewStudentTableItem label='Marital Status' value={capitalizeFirstLetter(userDetails.maritalStatus)} />
 			<ReviewStudentTableItem label='Birth Date' value={String(userDetails.dateOfBirth)} />
-			<ReviewStudentTableItem label='Degree Level' value={capitalizeFirstLetter(userDetails.degreeLevel) ?? 'N/A'} />
-			<ReviewStudentTableItem label='Degree Program' value={userDetails.degreeProgram ?? 'N/A'} />
 		</ReviewStudentTableContainer>
 
 
@@ -73,12 +75,35 @@
 		<ReviewStudentTableContainer>
 			<ReviewStudentTableItem label='Email' value={studentUser.email} />
 			<ReviewStudentTableItem label='Phone Number' value={userDetails.phoneNumber} />
-			<ReviewStudentTableItem label='Address One' value={userDetails.addressOne} />
-			<ReviewStudentTableItem label='Address Two' value={userDetails.addressTwo ?? 'N/A'} />
-			<ReviewStudentTableItem label='City' value={userDetails.city} />
-			<ReviewStudentTableItem label='State' value={userDetails.state} />
-			<ReviewStudentTableItem label='Country' value={userDetails.country} />
-			<ReviewStudentTableItem label='Facebook URL' value={userDetails.facebookUrl ?? 'N/A'} />
+			<ReviewStudentTableItem label='Current School Address' value={userDetails.academicInformation.currentSchoolAddress} />
+			<ReviewStudentTableItem label='Current Education Level' value={userDetails.academicInformation.currentSchool} />
+			<ReviewStudentTableItem label='Current Course' value={userDetails.academicInformation.currentEducationLevel} />
+		</ReviewStudentTableContainer>
+	</div>
+
+	<div class="px-4 py-5 sm:px-6">
+		<h3 class="text-lg leading-6 font-medium text-gray-900">Address Details</h3>
+	</div>
+
+
+	<div class="flex flex-wrap">
+		<!-- SECTION -->
+		<ReviewStudentTableContainer>
+			<ReviewStudentTableItem label='Current Address' value={userDetails.currentAddress} />
+			<ReviewStudentTableItem label='Current City' value={userDetails.currentCity} />
+			<ReviewStudentTableItem label='Current State' value={userDetails.currentState} />
+			<ReviewStudentTableItem label='Current Country' value={userDetails.currentCountry} />
+			<ReviewStudentTableItem label='Current Postal Code' value={userDetails.currentPostalCode} />
+		</ReviewStudentTableContainer>
+
+
+		<!-- SECTION -->
+		<ReviewStudentTableContainer>
+			<ReviewStudentTableItem label='Permanent Address' value={userDetails.permanentAddress} />
+			<ReviewStudentTableItem label='Permanent City' value={userDetails.permanentCity} />
+			<ReviewStudentTableItem label='Permanent State' value={userDetails.permanentState} />
+			<ReviewStudentTableItem label='Permanent Country' value={userDetails.permanentCountry} />
+			<ReviewStudentTableItem label='Permanent Postal Code' value={userDetails.permanentPostalCode} />
 		</ReviewStudentTableContainer>
 	</div>
 
