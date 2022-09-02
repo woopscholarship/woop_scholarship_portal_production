@@ -88,7 +88,7 @@
 	}
 </script>
 
-<form on:submit|preventDefault={setupAccount} action="/" method="POST">
+<form on:submit={setupAccount} action="/" method="POST">
 	<div class="input-group form-title">
 		<h2 class="text-2xl font-bold mb-4">Personal Information</h2>
 		<p>{steps[currentStep - 1]}</p>
