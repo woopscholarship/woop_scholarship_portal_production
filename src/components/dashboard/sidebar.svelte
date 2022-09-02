@@ -1,6 +1,5 @@
 <script lang="ts">
 	import NavigationItem from '$root/components/sidebar/navigationItem.svelte';
-	import Logo from '$root/components/common/Logo.svelte';
 
 	interface Route {
 		text: string;
