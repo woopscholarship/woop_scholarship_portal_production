@@ -11,7 +11,7 @@
 	export let profileImageURL: string;
 	export let routes: Route[];
 
-	console.log(routes);
+	console.log('routes', routes);
 </script>
 
 <!-- https://i.ibb.co/fFj4t1s/IMG-6893.jpg -->

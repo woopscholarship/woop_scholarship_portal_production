@@ -35,6 +35,11 @@
 				goto('/setup-account')
 			}
 
+			// IF USER DATA IS SET REDIRECT USER TO HOME PAGE
+			else if(data.user !== null && data.user !== undefined && data.user.accountType === 'admin') {
+				goto('/admin')
+			}
+
 			else {
 				goto('/'+ data.user.userType.toLowerCase())
 			}

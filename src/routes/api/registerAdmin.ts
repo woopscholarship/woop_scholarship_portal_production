@@ -1,12 +1,14 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import prisma from '$lib/prisma';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const structureData = (responseData: any): any => {
 	const data = {
 		id: responseData.id,
 		email: responseData.email,
 		profileImageUrl: `https://ui-avatars.com/api/?background=0fb7a6&color=fff&name=${encodeURI(responseData.firstName + ' ' + responseData.lastName)}`,
-		userType: responseData.accountType,
+		userType: 'ADMIN',
 		displayName: `${responseData.firstName} ${responseData.lastName}`,
 		userDetails: {
 			create: {
@@ -52,9 +54,26 @@ export const POST: RequestHandler = async ({ request }) => {
 		}
 	});
 
+
   if (existingUser) {
-    return {}
+     return {
+      headers: { 'Content-Type': 'application/json' },
+      status: 401,
+      message: 'Invalid secret key',
+      body: {}
+    };
   }
+
+  // Require Secret Key
+  if(responseData.secretKey !== 'rocketpassword!@#') {
+    return {
+      headers: { 'Content-Type': 'application/json' },
+      status: 401,
+      body: {message: 'Invalid secret key',}
+    };
+  }
+
+
 
 	const user = await prisma.user.create({
 		data: data
