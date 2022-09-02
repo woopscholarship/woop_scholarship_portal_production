@@ -23,7 +23,7 @@
 		}
 	})
 
-	$: currentStep = 5;
+	$: currentStep = 1;
 
 	let steps = [
 		'Tell us about yourself',

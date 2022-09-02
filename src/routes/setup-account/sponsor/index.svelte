@@ -7,9 +7,7 @@
 	import StepOneSponsorRegister from '$root/components/forms/sponsor_register/StepOneSponsorRegister.svelte';
 	import StepTwoSponsorRegister from '$root/components/forms/sponsor_register/StepTwoSponsorRegister.svelte';
 	import StepThreeSponsorRegister from '$root/components/forms/sponsor_register/StepThreeSponsorRegister.svelte';
-import StepFourSponsorRegister from '$root/components/forms/sponsor_register/StepFourSponsorRegister.svelte';
-
-
+	import StepFourSponsorRegister from '$root/components/forms/sponsor_register/StepFourSponsorRegister.svelte';
 
 	import FormButton from '$root/components/common/FormButton.svelte';
 	import ProgressBar from '$root/components/common/ProgressBar.svelte';
@@ -57,14 +55,12 @@ import StepFourSponsorRegister from '$root/components/forms/sponsor_register/Ste
 	$: secondProcessData = {};
 	$: thirdProcessData = {};
 
-
-
 	async function setupAccount(): Promise<void> {
 		const auth = getAuth();
 		const user = auth.currentUser;
 
 		// Session Timeout
-		if(!user) goto('/login')
+		if (!user) goto('/login');
 
 		const id = user!.uid;
 		const email = user?.email;
@@ -76,19 +72,16 @@ import StepFourSponsorRegister from '$root/components/forms/sponsor_register/Ste
 			accountType,
 			...firstProcessData,
 			...secondProcessData,
-			...thirdProcessData,
-		}
+			...thirdProcessData
+		};
 
-		console.log(inputData)
+		console.log(inputData);
 
 		// await fetch('/api/registerSponsor', {
 		// 	method: 'POST',
 		// 	body: JSON.stringify(inputData),
 		// });
 	}
-
-
-	
 </script>
 
 <form on:submit={setupAccount} action="/" method="POST">
@@ -98,18 +91,27 @@ import StepFourSponsorRegister from '$root/components/forms/sponsor_register/Ste
 	</div>
 
 	{#if currentStep === 1}
-		<StepOneSponsorRegister bind:processData={firstProcessData} bind:isProcessDone={isFirstProcessDone} />
+		<StepOneSponsorRegister
+			bind:processData={firstProcessData}
+			bind:isProcessDone={isFirstProcessDone}
+		/>
 		<div class="inline-input-group-wrapper submit-button-group">
 			<FormButton onClick={updateProgressValue} disabled={!isFirstProcessDone}>Continue</FormButton>
 		</div>
 	{:else if currentStep === 2}
-		<StepTwoSponsorRegister bind:processData={secondProcessData} bind:isProcessDone={isSecondProcessDone} />
+		<StepTwoSponsorRegister
+			bind:processData={secondProcessData}
+			bind:isProcessDone={isSecondProcessDone}
+		/>
 		<div class="inline-input-group-wrapper submit-button-group">
 			<FormButton onClick={updateProgressValue} disabled={!isSecondProcessDone}>Continue</FormButton
 			>
 		</div>
 	{:else if currentStep === 3}
-		<StepThreeSponsorRegister bind:processData={thirdProcessData} bind:isProcessDone={isThirdProcessDone} />
+		<StepThreeSponsorRegister
+			bind:processData={thirdProcessData}
+			bind:isProcessDone={isThirdProcessDone}
+		/>
 		<div class="inline-input-group-wrapper submit-button-group">
 			<FormButton onClick={updateProgressValue} disabled={!isThirdProcessDone}>Continue</FormButton>
 		</div>
