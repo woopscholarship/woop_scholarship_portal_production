@@ -13,7 +13,8 @@ export const GET: RequestHandler = async ({ params }) => {
 				include: {
 					userDetails: {
 						include: {
-							relationship: true
+							relationship: true,
+							academicInformation: true,
 						}
 					}
 				}

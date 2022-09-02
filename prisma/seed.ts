@@ -13,6 +13,25 @@ export const GRANT_PROGRAM: any[] = [];
 function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefined): any {
 	const firstName = faker.name.firstName();
 	const lastName = faker.name.lastName();
+  const currentEducationLevel = faker.helpers.arrayElement(['ASSOCIATE', 'BACHELORS', 'MASTERS', 'DOCTORAL'])
+
+  const generateDegreeProgram = (degreeLevel: string) => {
+    
+		if(degreeLevel === 'ASSOCIATE') {
+			return faker.helpers.arrayElement(associate)
+		}
+
+		if(degreeLevel === 'BACHELORS') {
+			return faker.helpers.arrayElement(bachelor)
+		}
+		if(degreeLevel === 'MASTERS') {
+			return faker.helpers.arrayElement(masters)
+		}
+
+		if(degreeLevel === 'DOCTORAL') {
+			return faker.helpers.arrayElement(doctors)
+		}
+  }
 
 	const user: any = {
 		id: faker.datatype.uuid(),
@@ -32,46 +51,47 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				maritalStatus: faker.helpers.arrayElement(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED']),
 				gender: faker.helpers.arrayElement(['FEMALE', 'MALE']),
 				dateOfBirth: faker.date.past(),
-				addressOne: faker.address.streetAddress(),
-				city: faker.address.cityName(),
-				state: faker.address.state(),
-				country: faker.address.country(),
+				nationality: 'Filipino',
+
+				currentAddress: faker.address.streetAddress(),
+				currentCity: faker.address.cityName(),
+				currentState: faker.address.state(),
+				currentCountry: faker.address.country(),
+				currentPostalCode: faker.address.zipCode(),
+				permanentAddress: faker.address.streetAddress(),
+				permanentCity: faker.address.cityName(),
+				permanentState: faker.address.state(),
+				permanentCountry: faker.address.country(),
+				permanentPostalCode: faker.address.zipCode(),
+
 				phoneNumber: faker.phone.number(),
 				relationship: {
 					create: {
-						motherPhotoUrl: faker.image.avatar(),
 						motherFirstName: faker.name.firstName(),
 						motherLastName: faker.name.lastName(),
 						motherOccupation: faker.name.jobTitle(),
 						motherPhone: faker.phone.number(),
-						fatherPhotoUrl: faker.image.avatar(),
 						fatherFirstName: faker.name.firstName(),
 						fatherLastName: faker.name.lastName(),
 						fatherOccupation: faker.name.jobTitle(),
 						fatherPhone: faker.phone.number()
 					}
 				},
-				degreeLevel: faker.helpers.arrayElement(['ASSOCIATE', 'BACHELORS', 'MASTERS', 'DOCTORAL']),
+        academicInformation: {
+          create: {
+            currentSchool: faker.company.companyName(),
+            currentSchoolAddress: faker.address.streetAddress(),
+            currentEducationLevel: currentEducationLevel,
+            currentCourse: generateDegreeProgram(currentEducationLevel)
+          }
+        },
+
 				reasonForApplication: faker.lorem.paragraph(),
 				facebookUrl: faker.internet.url(),
 				validIdUrl: faker.image.abstract()
 			}
 		};
 
-		if(user.userDetails.create.degreeLevel === 'ASSOCIATE') {
-			user.userDetails.create.degreeProgram = faker.helpers.arrayElement(associate)
-		}
-
-		if(user.userDetails.create.degreeLevel === 'BACHELORS') {
-			user.userDetails.create.degreeProgram = faker.helpers.arrayElement(bachelor)
-		}
-		if(user.userDetails.create.degreeLevel === 'MASTERS') {
-			user.userDetails.create.degreeProgram = faker.helpers.arrayElement(masters)
-		}
-
-		if(user.userDetails.create.degreeLevel === 'DOCTORAL') {
-			user.userDetails.create.degreeProgram = faker.helpers.arrayElement(doctors)
-		}
 
 	}
 
@@ -83,27 +103,22 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				maritalStatus: faker.helpers.arrayElement(['SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED']),
 				gender: faker.helpers.arrayElement(['FEMALE', 'MALE']),
 				dateOfBirth: faker.date.past(),
-				addressOne: faker.address.streetAddress(),
-				city: faker.address.cityName(),
-				state: faker.address.state(),
-				country: faker.address.country(),
+				nationality: 'Filipino',
+
+			
+        currentAddress: faker.address.streetAddress(),
+				currentCity: faker.address.cityName(),
+				currentState: faker.address.state(),
+				currentCountry: faker.address.country(),
+				currentPostalCode: faker.address.zipCode(),
+				permanentAddress: faker.address.streetAddress(),
+				permanentCity: faker.address.cityName(),
+				permanentState: faker.address.state(),
+				permanentCountry: faker.address.country(),
+				permanentPostalCode: faker.address.zipCode(),
+
 				reasonForApplication: faker.lorem.paragraph(),
 				phoneNumber: faker.phone.number()
-			}
-		};
-
-		user.organization = {
-			create: {
-				name: faker.company.companyName(),
-				logo: faker.image.avatar(),
-				description: faker.lorem.paragraph(),
-				address: faker.address.streetAddress(),
-				city: faker.address.cityName(),
-				state: faker.address.state(),
-				country: faker.address.country(),
-				phoneNumber: faker.phone.number(),
-				email: faker.internet.email(),
-				website: faker.internet.url(),
 			}
 		};
 	}

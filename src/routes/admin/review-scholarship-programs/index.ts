@@ -13,8 +13,11 @@ export const GET: RequestHandler = async () => {
 export const POST: RequestHandler = async ({ request }) => {
 	const form = await request.formData();
 	const status = <'APPROVED' | 'REJECTED' | 'PENDING'>String(form.get('status'));
+	const query = String(form.get('query'));
 
-	const scholarshipPrograms = await scholarship.filterScholarships(status);
+	console.log(query)
+
+	const scholarshipPrograms = await scholarship.filterScholarships(status, query);
 
 
 	return {

@@ -1,17 +1,17 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import prisma from '$root/lib/prisma';
 
-export const GET: RequestHandler = async ({ params }) => {
-	const currentUser = await prisma.user.findFirst({
+export const GET: RequestHandler = async ({params}) => {
+	const studentApplication = await prisma.studentApplication.findFirst({
 		where: {
 			id: {
-				equals: params.id
-			}
+				equals: params.aid
+			},
 		},
 		include: {
-			userDetails: {
+			scholarshipProgram: {
 				include: {
-					relationship: true
+					sponsorUser: true
 				}
 			}
 		}
@@ -20,6 +20,6 @@ export const GET: RequestHandler = async ({ params }) => {
 	return {
 		headers: { 'Content-Type': 'application/json' },
 		status: 200,
-		body: { currentUser }
+		body: { studentApplication }
 	};
 };

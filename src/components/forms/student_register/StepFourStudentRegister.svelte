@@ -1,62 +1,123 @@
 <script lang="ts">
+	import Input from '$root/components/common/Input.svelte';
+	import InlineContainer from '$root/components/container/InlineContainer.svelte';
 	import { onMount } from 'svelte/internal';
-	import InlineContainer from '$lib/components/container/InlineContainer.svelte';
-	import Input from '$lib/components/common/Input.svelte';
 
-	let inputItems = [
-		{
-			type: 'text',
-			id: 'facebookLink',
-			name: 'facebookLink',
-			placeholder: 'Enter Facebook Link',
-			label: 'Facebook Link',
-			required: true
-		},
-		// {
-		// 	type: 'file',
-		// 	id: 'governmentId',
-		// 	name: 'governmentId',
-		// 	label: 'Government ID',
-		// 	required: true
-		// },
-		{
-			type: 'textarea',
-			id: 'reason',
-			name: 'reason',
-			label: 'Reason to Apply for Scholarships on WoopScholarship',
-			placeholder: 'Enter Reason',
-			required: true
-		}
+	const inputItems = [
+		[
+			{
+				type: 'text',
+				id: 'motherFirstName',
+				name: 'motherFirstName',
+				placeholder: 'Enter Mother First Name',
+				label: 'Mother First Name'
+			},
+			{
+				type: 'text',
+				id: 'fatherFirstName',
+				name: 'fatherFirstName',
+				placeholder: 'Enter Fathers First Name',
+				label: 'Father First Name'
+			}
+		],
+		[
+			{
+				type: 'text',
+				id: 'motherLastName',
+				name: 'motherLastName',
+				placeholder: 'Enter Mother Last Name',
+				label: 'Mother Last Name'
+			},
+			{
+				type: 'text',
+				id: 'fatherLastName',
+				name: 'fatherLastName',
+				placeholder: 'Enter Father Last Name',
+				label: 'Father Last Name'
+			}
+		],
+		[
+			{
+				type: 'text',
+				id: 'motherOccupation',
+				name: 'motherOccupation',
+				placeholder: 'Enter Mother Occupation',
+				label: 'Mother Occupation'
+			},
+			{
+				type: 'text',
+				id: 'fatherOccupation',
+				name: 'fatherOccupation',
+				placeholder: 'Enter Father Occupation',
+				label: 'Father Occupation'
+			}
+		],
+		[
+			{
+				type: 'text',
+				id: 'motherPhone',
+				name: 'motherPhone',
+				placeholder: 'Enter Mother Contact Number',
+				label: 'Mother Contact Number'
+			},
+			{
+				type: 'text',
+				id: 'fatherPhone',
+				name: 'fatherPhone',
+				placeholder: 'Enter Father Phone Number',
+				label: 'Father Contact Number'
+			}
+		]
 	];
 
-	export let isProcessDone = false;
-	export let data = {};
+	export let processData = {};
 
 	onMount(() => {
-		inputItems.forEach((input) => {
-			document.querySelector(`#${input.id}`)?.addEventListener('change', () => {
-				const facebookLink = (<HTMLInputElement>document.querySelector('#facebookLink'))!.value;
-				// const governmentId = (<HTMLInputElement>document.querySelector('#governmentId'))!;
-				const reason = (<HTMLInputElement>document.querySelector('#reason'))!.value;
+		const inputElementIds = [
+			'#motherFirstName',
+			'#motherLastName',
+			'#motherOccupation',
+			'#motherPhone',
+			'#fatherFirstName',
+			'#fatherLastName',
+			'#fatherOccupation',
+			'#fatherPhone'
+		];
 
-				// && governmentId.value !== ''
-				if (facebookLink !== '' && reason !== '') {
-					data = {
-						facebookLink,
-						// governmentId: governmentId.files![0],
-						reason: reason
-					};
+		inputElementIds.forEach((id) => {
+			document.querySelector(id)?.addEventListener('change', () => {
+				const motherFirstName = (<HTMLInputElement>document.querySelector('#motherFirstName'))!
+					.value;
+				const motherLastName = (<HTMLInputElement>document.querySelector('#motherLastName'))!.value;
+				const motherOccupation = (<HTMLInputElement>document.querySelector('#motherOccupation'))!
+					.value;
+				const motherPhone = (<HTMLInputElement>document.querySelector('#motherPhone'))!.value;
+				const fatherFirstName = (<HTMLInputElement>document.querySelector('#fatherFirstName'))!
+					.value;
+				const fatherLastName = (<HTMLInputElement>document.querySelector('#fatherLastName'))!.value;
+				const fatherOccupation = (<HTMLInputElement>document.querySelector('#fatherOccupation'))!
+					.value;
+				const fatherPhone = (<HTMLInputElement>document.querySelector('#fatherPhone'))!.value;
 
-					isProcessDone = true;
-				}
+				processData = {
+					motherFirstName,
+					motherLastName,
+					motherOccupation,
+					motherPhone,
+					fatherFirstName,
+					fatherLastName,
+					fatherOccupation,
+					fatherPhone
+				};
 			});
 		});
 	});
-
-	
-
 </script>
 
-{#each inputItems as item}
-	<Input {...item} />
+{#each inputItems as inputItem}
+	<InlineContainer>
+		{#each inputItem as item}
+			<Input {...item} />
+		{/each}
+	</InlineContainer>
 {/each}

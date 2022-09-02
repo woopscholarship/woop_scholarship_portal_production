@@ -1,114 +1,174 @@
 <script lang="ts">
-	import Input from '$lib/components/common/Input.svelte';
-	import InlineContainer from '$lib/components/container/InlineContainer.svelte';
+	import Input from '$root/components/common/Input.svelte';
+	import InlineContainer from '$root/components/container/InlineContainer.svelte';
 	import { onMount } from 'svelte/internal';
 
 	const inputItems = [
 		[
 			{
 				type: 'text',
-				id: 'motherFirstName',
-				name: 'motherFirstName',
-				placeholder: 'Enter Mother First Name',
-				label: 'Mother First Name'
+				id: 'currentSchoolAddress',
+				name: 'currentSchoolAddress',
+				placeholder: 'Enter Current School Address',
+				label: 'Current School Address',
+				required: true
 			},
 			{
 				type: 'text',
-				id: 'fatherFirstName',
-				name: 'fatherFirstName',
-				placeholder: 'Enter Fathers First Name',
-				label: 'Father First Name'
+				id: 'previousSchoolAddress',
+				name: 'previousSchoolAddress',
+				placeholder: 'Enter Previous School Address',
+				label: 'Previous School Address',
+				required: true
 			}
 		],
 		[
 			{
 				type: 'text',
-				id: 'motherLastName',
-				name: 'motherLastName',
-				placeholder: 'Enter Mother Last Name',
-				label: 'Mother Last Name'
+				id: 'currentSchool',
+				name: 'currentSchool',
+				placeholder: 'Enter School Name',
+				label: 'Current School Name',
+				required: true
 			},
 			{
 				type: 'text',
-				id: 'fatherLastName',
-				name: 'fatherLastName',
-				placeholder: 'Enter Father Last Name',
-				label: 'Father Last Name'
+				id: 'previousSchoolAttended',
+				name: 'previousSchoolAttended',
+				placeholder: 'Enter Previous School Name',
+				label: 'Previous School Name',
+				required: true
+			}
+		],
+		[
+			{
+				type: 'select',
+				id: 'currentEducationLevel',
+				name: 'currentEducationLevel',
+				label: 'Current Education Level',
+				required: true,
+				options: [
+					{
+						label: 'Associate',
+						value: 'ASSOCIATE'
+					},
+					{
+						label: 'Bachelors',
+						value: 'BACHELORS'
+					},
+					{
+						label: 'Masters',
+						value: 'MASTERS'
+					},
+					{
+						label: 'Doctoral',
+						value: 'DOCTORAL'
+					}
+				]
+			},
+			{
+				type: 'select',
+				id: 'previousEducationLevel',
+				name: 'previousEducationLevel',
+				label: 'Previous Education Level',
+				options: [
+					{
+						label: 'Associate',
+						value: 'ASSOCIATE'
+					},
+					{
+						label: 'Bachelors',
+						value: 'BACHELORS'
+					},
+					{
+						label: 'Masters',
+						value: 'MASTERS'
+					},
+					{
+						label: 'Doctoral',
+						value: 'DOCTORAL'
+					}
+				]
 			}
 		],
 		[
 			{
 				type: 'text',
-				id: 'motherOccupation',
-				name: 'motherOccupation',
-				placeholder: 'Enter Mother Occupation',
-				label: 'Mother Occupation'
+				id: 'currentCourse',
+				name: 'currentCourse',
+				placeholder: 'Enter Current Course',
+				label: 'Current Course',
+				required: true
 			},
 			{
 				type: 'text',
-				id: 'fatherOccupation',
-				name: 'fatherOccupation',
-				placeholder: 'Enter Father Occupation',
-				label: 'Father Occupation'
-			}
-		],
-		[
-			{
-				type: 'text',
-				id: 'motherPhone',
-				name: 'motherPhone',
-				placeholder: 'Enter Mother Contact Number',
-				label: 'Mother Contact Number'
-			},
-			{
-				type: 'text',
-				id: 'fatherPhone',
-				name: 'fatherPhone',
-				placeholder: 'Enter Father Phone Number',
-				label: 'Father Contact Number'
+				id: 'desiredCourse',
+				name: 'desiredCourse',
+				placeholder: 'Enter Desired Course',
+				label: 'Desired Course',
+				required: true
 			}
 		]
 	];
 
-	export let data = {};
+	export let isProcessDone: boolean = false;
+	export let processData: any = {};
 
 	onMount(() => {
 		const inputElementIds = [
-			'#motherFirstName',
-			'#motherLastName',
-			'#motherOccupation',
-			'#motherPhone',
-			'#fatherFirstName',
-			'#fatherLastName',
-			'#fatherOccupation',
-			'#fatherPhone'
+			'#currentSchoolAddress',
+			'#currentSchool',
+			'#currentEducationLevel',
+			'#currentCourse',
+			'#previousSchoolAddress',
+			'#previousSchoolAttended',
+			'#previousEducationLevel',
+			'#desiredCourse'
 		];
 
 		inputElementIds.forEach((id) => {
 			document.querySelector(id)?.addEventListener('change', () => {
-				const motherFirstName = (<HTMLInputElement>document.querySelector('#motherFirstName'))!
-					.value;
-				const motherLastName = (<HTMLInputElement>document.querySelector('#motherLastName'))!.value;
-				const motherOccupation = (<HTMLInputElement>document.querySelector('#motherOccupation'))!
-					.value;
-				const motherPhone = (<HTMLInputElement>document.querySelector('#motherPhone'))!.value;
-				const fatherFirstName = (<HTMLInputElement>document.querySelector('#fatherFirstName'))!
-					.value;
-				const fatherLastName = (<HTMLInputElement>document.querySelector('#fatherLastName'))!.value;
-				const fatherOccupation = (<HTMLInputElement>document.querySelector('#fatherOccupation'))!
-					.value;
-				const fatherPhone = (<HTMLInputElement>document.querySelector('#fatherPhone'))!.value;
+				const currentSchoolAddress = (<HTMLInputElement>(
+					document.querySelector('#currentSchoolAddress')
+				))!.value;
+				const currentSchool = (<HTMLInputElement>document.querySelector('#currentSchool'))!.value;
+				const currentEducationLevel = (<HTMLInputElement>(
+					document.querySelector('#currentEducationLevel')
+				))!.value;
+				const currentCourse = (<HTMLInputElement>document.querySelector('#currentCourse'))!.value;
+				const previousSchoolAddress = (<HTMLInputElement>(
+					document.querySelector('#previousSchoolAddress')
+				))!.value;
+				const previousSchoolAttended = (<HTMLInputElement>(
+					document.querySelector('#previousSchoolAttended')
+				))!.value;
+				const previousEducationLevel = (<HTMLInputElement>(
+					document.querySelector('#previousEducationLevel')
+				))!.value;
+				const desiredCourse = (<HTMLInputElement>document.querySelector('#desiredCourse'))!.value;
 
-				data = {
-					motherFirstName,
-					motherLastName,
-					motherOccupation,
-					motherPhone,
-					fatherFirstName,
-					fatherLastName,
-					fatherOccupation,
-					fatherPhone
-				};
+				if (
+					currentSchoolAddress !== '' &&
+					currentSchool !== '' &&
+					currentEducationLevel !== '' &&
+					currentCourse !== '' &&
+					previousSchoolAddress !== '' &&
+					previousSchoolAttended !== '' &&
+					previousEducationLevel !== '' &&
+					desiredCourse !== ''
+				) {
+					processData = {
+						currentSchoolAddress,
+						currentSchool,
+						currentEducationLevel,
+						currentCourse,
+						previousSchoolAddress,
+						previousSchoolAttended,
+						previousEducationLevel,
+						desiredCourse
+					};
+					isProcessDone = true;
+				}
 			});
 		});
 	});
