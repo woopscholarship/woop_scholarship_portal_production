@@ -58,76 +58,33 @@
 	$: isThirdProcessDone = false;
 	$: isFifthProcessDone = false;
 
-	async function setupAccount() {
+	async function setupAccount(): Promise<void> {
 		const auth = getAuth();
 		const user = auth.currentUser;
 
 		// Session Timeout
-		if(!user) {
-			goto('/login')
-		}
+		if(!user) goto('/login')
 
-		// const data = {
-		// 	...firstProcessData,
-		// 	...secondProcessData,
-		// 	...thirdProcessData,
-		// 	...fourthProcessData,
-		// 	...fifthProcessData,
-		// }
 
-		console.log($page.url.pathname)
+		const id = user!.uid;
+		const email = user?.email;
+		const accountType = $page.url.pathname.includes('student') ? 'STUDENT' : 'SPONSOR';
 
 		const inputData = {
-			id: user!.uid,
-			email: user?.email,
-			accountType: $page.url.pathname.includes('student') ? 'STUDENT' : 'SPONSOR',
-			birthDate: '2001-12-01',
-			currentAddress: 'Blk 7 Lot 4 Bersales Subdivision Bulatok',
-			currentCity: 'Pagadian City',
-			currentCountry: '7016',
-			currentCourse: 'Computer Science',
-			currentEducationLevel: 'BACHELORS',
-			currentPostalCode: '7016',
-			currentSchool: 'SCC',
-			currentSchoolAddress: 'Pagadian City',
-			currentState: 'ZDS',
-			desiredCourse: 'Computer Science',
-			facebookLink: 'facebook.com/seyluap',
-			fatherFirstName: 'Bayani',
-			fatherLastName: 'Reyes',
-			fatherOccupation: 'Deceased',
-			fatherPhone: 'N/A',
-			firstName: 'Paul Bryan',
-			gender: 'male',
-			lastName: 'Reyes',
-			maritalStatus: 'Single',
-			middleName: 'Esprescion',
-			motherFirstName: 'Helen',
-			motherLastName: 'Reyes',
-			motherOccupation: 'House Wife',
-			motherPhone: '09983898703',
-			nationality: 'Filipino',
-			permanentAddress: 'Blk 7 Lot 4 Bersales Subdivision Bulatok',
-			permanentCity: 'Pagadian City',
-			permanentCountry: 'Philippines',
-			permanentPostalCode: '7016',
-			permanentState: 'ZDS',
-			phoneNumber: '09954979807',
-			previousEducationLevel: 'BACHELORS',
-			previousSchoolAddress: 'Pagadian City',
-			previousSchoolAttended: 'SCC',
-			reason: 'I want to study abroad'
-		};
+			id,
+			email,
+			accountType,
+			...firstProcessData,
+			...secondProcessData,
+			...thirdProcessData,
+			...fourthProcessData,
+			...fifthProcessData,
+		}
 
-		console.log(inputData);
-
-		const response = await fetch('/api/register', {
+		await fetch('/api/register', {
 			method: 'POST',
 			body: JSON.stringify(inputData),
 		});
-		const data = await response.json();
-
-		console.log(data);
 	}
 </script>
 

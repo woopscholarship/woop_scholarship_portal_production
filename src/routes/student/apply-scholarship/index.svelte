@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { currentUser } from '$root/stores/authStore';
-	import StudentTopBar from '$root/components/student/studentTopBar.svelte';
 	import DataTable, { Head, Body, Row, Cell, Pagination } from '@smui/data-table';
 	import Select, { Option } from '@smui/select';
 	import IconButton from '@smui/icon-button';
@@ -8,7 +6,6 @@
 	import { page } from '$app/stores';
 
 	export let scholarshipPrograms: any;
-	export let applicantCount: number;
 
 	let rowsPerPage = 10;
 	let currentPage = 0;

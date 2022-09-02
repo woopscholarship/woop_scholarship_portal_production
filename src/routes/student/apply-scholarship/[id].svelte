@@ -55,11 +55,19 @@
 			}
 		}
 	}
+
+	let isApplied = false;
 </script>
 
 <div class="flex gap-4 mt-4">
 	<div class="w-full bg-white p-6 rounded shadow-sm">
 		<h3 class="text-xl font-semibold">Scholarship Details</h3>
+
+		{#if isApplied}
+			<div class="text-center text-green-400">
+				<p>You're Application has been submitted</p>
+			</div>
+		{/if}
 
 		<div class="border-t border-gray-200 py-5 sm:p-0">
 			<dl class="sm:divide-y sm:divide-gray-200">
@@ -94,7 +102,7 @@
 <form
 	on:submit|preventDefault={applyForScholarship}
 	method="POST"
-	action="/api/applyForScholarship/"
+	action="#"
 	class="my-4"
 >
 	<div class="flex flex-col">
@@ -102,5 +110,5 @@
 		<textarea class="p-2" name="reason" id="reason" cols="30" rows="10" />
 	</div>
 
-	<input class="bg-primary text-white px-4 py-2 mt-4 hover:cursor-pointer" type="submit" />
+	<input on:click={()=> isApplied = !isApplied } class="bg-primary text-white px-4 py-2 mt-4 hover:cursor-pointer" type="submit" />
 </form>
