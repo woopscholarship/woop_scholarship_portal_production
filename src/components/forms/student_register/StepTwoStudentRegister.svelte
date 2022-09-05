@@ -14,7 +14,7 @@
 				id: 'currentAddress',
 				name: 'currentAddress',
 				placeholder: 'Enter Current Address',
-				label: 'Current Address',
+				label: 'Address',
 				required: true
 			},
 			{
@@ -22,7 +22,7 @@
 				id: 'permanentAddress',
 				name: 'permanentAddress',
 				placeholder: 'Enter Permanent Address',
-				label: 'Permanent Address'
+				label: 'Address'
 			}
 		],
 		[
@@ -31,15 +31,15 @@
 				id: 'currentCity',
 				name: 'currentCity',
 				placeholder: 'Enter City',
-				label: 'Current City',
+				label: 'City',
 				required: true
 			},
 			{
 				type: 'text',
 				id: 'permanentCity',
 				name: 'permanentCity',
-				placeholder: 'Enter Permanent Address',
-				label: 'Permanent Address',
+				placeholder: 'Enter Permanent City',
+				label: 'City',
 				required: true
 			}
 		],
@@ -49,7 +49,7 @@
 				id: 'currentState',
 				name: 'currentState',
 				placeholder: 'Enter Current State',
-				label: 'Current State',
+				label: 'State',
 				required: true
 			},
 			{
@@ -57,7 +57,7 @@
 				id: 'permanentState',
 				name: 'permanentState',
 				placeholder: 'Enter Permanent State',
-				label: 'Permanent State',
+				label: 'State',
 				required: true
 			}
 		],
@@ -67,7 +67,7 @@
 				id: 'currentCountry',
 				name: 'currentCountry',
 				placeholder: 'Enter Current Country',
-				label: 'Current Country',
+				label: 'Country',
 				required: true
 			},
 			{
@@ -75,7 +75,7 @@
 				id: 'permanentCountry',
 				name: 'permanentCountry',
 				placeholder: 'Enter Permanent Country',
-				label: 'Permanent Country',
+				label: 'Country',
 				required: true
 			}
 		],
@@ -85,7 +85,7 @@
 				id: 'currentPostalCode',
 				name: 'currentPostalCode',
 				placeholder: 'Enter Current Postal Code',
-				label: 'Current Postal Code / Zip Code',
+				label: 'Postal Code / Zip Code',
 				required: true
 			},
 			{
@@ -93,7 +93,7 @@
 				id: 'permanentPostalCode',
 				name: 'permanentPostalCode',
 				placeholder: 'Enter Current Permanent Code',
-				label: 'Permanent Postal Code / Zip Code',
+				label: 'Postal Code / Zip Code',
 				required: true
 			}
 		],

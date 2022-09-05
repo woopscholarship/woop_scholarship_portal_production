@@ -12,8 +12,6 @@
 	import FormButton from '$root/components/common/FormButton.svelte';
 	import ProgressBar from '$root/components/common/ProgressBar.svelte';
 	import { getAuth } from 'firebase/auth';
-	import app from '$lib/initFirebase';
-	import Input from '$root/components/common/Input.svelte';
 
 	$: currentStep = 1;
 
@@ -75,12 +73,10 @@
 			...thirdProcessData
 		};
 
-		console.log(inputData);
-
-		// await fetch('/api/registerSponsor', {
-		// 	method: 'POST',
-		// 	body: JSON.stringify(inputData),
-		// });
+		await fetch('/api/registerSponsor', {
+			method: 'POST',
+			body: JSON.stringify(inputData),
+		});
 	}
 </script>
 

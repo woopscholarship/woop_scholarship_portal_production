@@ -4,7 +4,7 @@
 	import { getAuth, onAuthStateChanged } from 'firebase/auth';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { isLoggedIn, accountType, userId } from '../stores/authStore';
+	import { isLoggedIn, accountType, userId, currentUser } from '../stores/authStore';
 
 	onMount(async () => {
 		const auth = getAuth();
@@ -25,10 +25,15 @@
 				isLoggedIn.update(() => true);
 				accountType.update(() => data.user.userType);
 				userId.update(() => user.uid);
+				currentUser.update(() => user);
 			} else {
+
+				// Clear values
 				isLoggedIn.update(() => false);
 				accountType.update(() => '');
 				userId.update(() => '');
+				currentUser.update(() => ({}));
+				
 				goto('/login');
 			}
 		});

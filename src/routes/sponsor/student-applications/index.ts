@@ -1,17 +1,27 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import prisma from '$root/lib/prisma';
+import { currentUser } from '$root/stores/authStore';
+
 
 export const GET: RequestHandler = async () => {
 	const currentIndex = 0;
+	let currentUserData: any;
+
+
+	currentUser.subscribe((value) => {
+		currentUserData = value;
+	});
+
+	
 
 	const sponsorUser = await prisma.user.findFirst({
 		where: {
 			userType: {
 				equals: 'SPONSOR'
+			},
+			email: {
+				equals: (currentUserData!).email
 			}
-			// email: {
-			// 	equals: 'Mackenzie_Kuhic1@gmail.com'
-			// }
 		}
 	});
 

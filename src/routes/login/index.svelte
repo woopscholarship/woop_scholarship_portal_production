@@ -3,7 +3,7 @@
 	import Icon from 'svelte-awesome';
 	import google from 'svelte-awesome/icons/google';
 	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-	import { isLoggedIn, accountType, userId } from '$root/stores/authStore';
+	import { isLoggedIn, accountType, userId, currentUser } from '$root/stores/authStore';
 	import { goto } from '$app/navigation';
 
 	const auth = getAuth();
@@ -29,6 +29,8 @@
 				body: JSON.stringify({email: email})
 			});
 			const data = await response.json();
+
+			currentUser.set(data);
 
 			// IF USER DATA IS NOT SET REDIRECT USER TO SETUP ACCOUNT PAGE
 			if(data.user === null || data.user === undefined) {
@@ -72,7 +74,6 @@
 						type="email"
 						autocomplete="email"
 						required
-						value="paulreyesdigital@gmail.com"
 						class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
 					/>
 				</div>
@@ -87,7 +88,6 @@
 						type="password"
 						autocomplete="current-password"
 						required
-						value="123123123"
 						class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
 					/>
 				</div>

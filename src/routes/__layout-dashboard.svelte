@@ -31,14 +31,25 @@
 
 		if (currentUser) {
 			if (isAdminRoute) {
-				routes = adminRoutes;
+				// Get the user's account type
+				const response = await fetch('./api/getUserData', {
+					method: 'POST',
+					body: JSON.stringify({ email: currentUser.email })
+				});
+
+				const data = await response.json();
 
 				sidebar = {
 					displayName: 'ADMIN',
 					profileImageURL: 'https://ui-avatars.com/api/?background=0fb7a6&color=fff&name=ADMIN',
-					routes: routes
+					routes: adminRoutes
 				};
 
+				routes =  adminRoutes;
+
+			}
+
+			if (isSponsorRoute) {
 				// Get the user's account type
 				const response = await fetch('./api/getUserData', {
 					method: 'POST',
@@ -47,29 +58,19 @@
 
 				const { user } = await response.json();
 
-				// seorockettools@gmail.com
-				// FORCE USER TO LOGIN AS ADMIN TO ACCESS ADMIN PAGES
-				console.log('user.accountType',user.accountType !== 'ADMIN');
-				// if(user.accountType !== 'ADMIN') {
-				// 	goto('/login');
-				// }
-			}
-
-			if (isSponsorRoute) {
-				routes = sponsorRoutes;
+				console.log(user);
 
 				sidebar = {
-					displayName: 'ADMIN',
-					profileImageURL: 'https://ui-avatars.com/api/?background=0fb7a6&color=fff&name=ADMIN',
-					routes: routes
+					displayName: user.displayName,
+					profileImageURL:
+						'https://ui-avatars.com/api/?background=0fb7a6&color=fff&name=' +
+						encodeURI(user.displayName),
+					routes: sponsorRoutes
 				};
+
+				routes =  sponsorRoutes;
 			}
-
-			
 		}
-
-		
-		
 	});
 </script>
 

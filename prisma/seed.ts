@@ -86,7 +86,7 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
           }
         },
 
-				reasonForApplication: faker.lorem.paragraph(),
+				reasonForApplication: faker.lorem.paragraph(2),
 				facebookUrl: faker.internet.url(),
 				validIdUrl: faker.image.abstract()
 			}
@@ -117,7 +117,7 @@ function createRandomUser(userType: 'STUDENT' | 'SPONSOR' | undefined = undefine
 				permanentCountry: faker.address.country(),
 				permanentPostalCode: faker.address.zipCode(),
 
-				reasonForApplication: faker.lorem.paragraph(),
+				reasonForApplication: faker.lorem.paragraph(2),
 				phoneNumber: faker.phone.number()
 			}
 		};
@@ -139,7 +139,7 @@ function createRandomUsers(count: number, userType: 'STUDENT' | 'SPONSOR' | unde
 function createScholarshipProgram(programType: 'SCHOLARSHIP' | 'GRANT') {
 	const scholarshipProgram = {
 		name: faker.company.companyName() + ' Scholarship Program',
-		description: faker.lorem.paragraph(),
+		description: faker.lorem.paragraph(2),
 		postedOn: faker.date.past(),
 		degreeLevel: faker.helpers.arrayElement(['ASSOCIATE', 'BACHELORS', 'MASTERS', 'DOCTORAL']),
 		maxApplicants: +faker.random.numeric(3),
@@ -168,7 +168,7 @@ function createStudentApplications(count: number) {
 	const studentUser = createRandomUser('STUDENT');
 
 		applications.push({
-			reason: faker.lorem.paragraph(),
+			reason: faker.lorem.paragraph(2),
 			studentUser: {
 				create: studentUser
 			}
@@ -178,7 +178,7 @@ function createStudentApplications(count: number) {
 	return applications;
 }
 
-Array.from({ length: 20 }).forEach(() => {
+Array.from({ length: 10 }).forEach(() => {
 	USERS.push(createRandomUser());
 	SCHOLARSHIP_PROGRAM.push(createScholarshipProgram('SCHOLARSHIP'));
 	GRANT_PROGRAM.push(createScholarshipProgram('GRANT'));
@@ -199,7 +199,7 @@ async function main() {
 					create: createRandomUser('SPONSOR')
 				},
 				applicants: {
-					create: createStudentApplications(50)
+					create: createStudentApplications(10)
 				}
 			}
 		});

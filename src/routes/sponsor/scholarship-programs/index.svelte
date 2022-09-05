@@ -13,9 +13,6 @@
 		applicants: StudentApplication[];
 	}
 	
-
-	
-	
 	export let scholarshipPrograms: _ScholarshipProgram[];
 
 	let programs = [...scholarshipPrograms];

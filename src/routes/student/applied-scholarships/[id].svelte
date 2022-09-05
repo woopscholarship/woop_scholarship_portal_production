@@ -129,5 +129,59 @@
 	</DataTable>
 
 {:else}
-	<p class="text-center p-4 bg-green-200">Loading...</p>
+<DataTable $aria-label="Todo list" style="width: 100%;">
+	<Head>
+		<Row>
+			<Cell>Program Name</Cell>
+			<Cell>Application Date</Cell>
+			<Cell>Status</Cell>
+		</Row>
+	</Head>
+	<Body>
+			<p class="text-center p-4 bg-red-200">NO SCHOLARSHIP DATA FOUND</p>
+	</Body>
+
+	<Pagination slot="paginate">
+		<svelte:fragment slot="rowsPerPage">
+			<Label>Rows Per Page</Label>
+			<Select variant="outlined" bind:value={rowsPerPage} noLabel>
+				<Option value={10}>10</Option>
+				<Option value={25}>25</Option>
+				<Option value={100}>100</Option>
+			</Select>
+		</svelte:fragment>
+		<svelte:fragment slot="total">
+			{start + 1}-{end} of 0
+		</svelte:fragment>
+
+		<IconButton
+			class="material-icons"
+			action="first-page"
+			title="First page"
+			on:click={() => (currentPage = 0)}
+			disabled={currentPage === 0}>first_page</IconButton
+		>
+		<IconButton
+			class="material-icons"
+			action="prev-page"
+			title="Prev page"
+			on:click={() => currentPage--}
+			disabled={currentPage === 0}>chevron_left</IconButton
+		>
+		<IconButton
+			class="material-icons"
+			action="next-page"
+			title="Next page"
+			on:click={() => currentPage++}
+			disabled={currentPage === lastPage}>chevron_right</IconButton
+		>
+		<IconButton
+			class="material-icons"
+			action="last-page"
+			title="Last page"
+			on:click={() => (currentPage = lastPage)}
+			disabled={currentPage === lastPage}>last_page</IconButton
+		>
+	</Pagination>
+</DataTable>
 {/if}
