@@ -84,7 +84,7 @@
 		<!-- Layout: student_dashboard -->
 		<div transition:fade class="flex border w-screen min-h-screen">
 			<!-- Sidebar -->
-			<div class="flex flex-col flex-grow w-[20%] pt-10 pb-4 bg-white">
+			<div class="flex flex-col flex-grow w-[20%] pt-10 pb-4 bg-#11264B">
 				<!-- Brand Logo -->
 				<div class="flex justify-center flex-shrink-0 px-4 space-y-5">
 					<img
