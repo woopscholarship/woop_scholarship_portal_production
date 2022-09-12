@@ -40,10 +40,10 @@ export const studentRoutes = {
     },
   ],
   main: [
-    // {
-    //   text: 'Dashboard',
-    //   href: '/student/dashboard'
-    // },
+    {
+       text: 'Dashboard',
+       href: '/student/dashboard'
+    },
     {
       text: 'Apply Scholarship',
       href: '/student/apply-scholarship'

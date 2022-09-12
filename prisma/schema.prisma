@@ -118,6 +118,7 @@ model ScholarshipProgram {
   typeOfGrantApplication    String?
   reasonForGrantApplication String?
   reasonWhyYourDeserveGrant String?
+  ScholarshipForWhatLocation String?
 
   // SPONSOR USER REFERENCE
   sponsorUser   User?   @relation(fields: [sponsorUserId], references: [id])

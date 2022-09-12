@@ -59,10 +59,7 @@
 			</p>
 			<p class="relative mt-1 text-gray-400 text-sm">
 				<Icon class="absolute" data={mapMarker} scale={1.2} />
-				<span class="ml-4"
-					>{user.userDetails.currentAddress}, {user.userDetails.currentCity}, {user.userDetails.currentState}, {user
-						.userDetails.currentCountry}, {user.userDetails.currentPostalCode}</span
-				>
+				<span class="ml-4">{user.userDetails.currentAddress}, {user.userDetails.currentCity}, {user.userDetails.currentState}, {user.userDetails.currentCountry}, {user.userDetails.currentPostalCode}</span>
 			</p>
 		</div>
 	</div>
@@ -74,23 +71,16 @@
 
 		<div class="border-t border-gray-200 py-5 sm:p-0">
 			<dl class="sm:divide-y sm:divide-gray-200">
-				<TableItem
-					label="Full Name"
-					value={`${user.userDetails.firstName} ${user.userDetails.lastName}`}
-				/>
+				<TableItem label="Full Name" value={`${user.userDetails.firstName} ${user.userDetails.lastName}`}/>
 				<TableItem label="Email" value={user.email} />
 				<TableItem label="Phone" value={user.userDetails.phoneNumber} />
 				<TableItem label="Gender" value={capitalizeFirstLetter(user.userDetails.gender)} />
-				<TableItem
-					label="Marital Status"
-					value={capitalizeFirstLetter(String(user.userDetails.maritalStatus))}
-				/>
+				<TableItem label="Marital Status" value={capitalizeFirstLetter(String(user.userDetails.maritalStatus))}/>
 				<TableItem label="Date Of Birth" value={String(user.userDetails.dateOfBirth)} />
 				<TableItem label="Current School Address" value={String(user.userDetails.academicInformation.schoolAddress)} />
 				<TableItem label="Current Degree Program" value={String(user.userDetails.academicInformation.currentSchool)} />
 				<TableItem label="Current Education Level" value={String(user.userDetails.academicInformation.currentEducationLevel)} />
 				<TableItem label="Current Degree Program" value={String(user.userDetails.academicInformation.currentCourse)} />
-
 				<TableItem label="Previous School Address" value={String(user.userDetails.academicInformation.previousAddress)} />
 				<TableItem label="Previous Degree Program" value={String(user.userDetails.academicInformation.previousSchool)} />
 				<TableItem label="Previous Education Level" value={String(user.userDetails.academicInformation.previousEducationLevel)} />

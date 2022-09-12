@@ -40,7 +40,7 @@
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						reason: 'reason',
+						reason: reason,
 						id: currentUser.uid,
 						scholarshipId: $page.url.pathname.split('/')[$page.url.pathname.split('/').length - 1]
 					})
